@@ -24,10 +24,21 @@ int main(void)
     glfwMakeContextCurrent(window);
 
     auto device = alina::opengl::CreateDevice(glfwGetProcAddress);
+    auto buffer = device->createBuffer(
+        alina::BufferDesc()
+            .setDebugName("VertexBuffer1")
+            .setType(alina::BufferType::VERTEX)
+    );
+    
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        if(device->beginFrame()) {
+            device->endFrame();
+            /* Swap front and back buffers */
+            glfwSwapBuffers(window);
+        }
         /* Poll for and process events */
         glfwPollEvents();
     }

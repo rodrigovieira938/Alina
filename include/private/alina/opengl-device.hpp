@@ -6,7 +6,9 @@ namespace alina::opengl {
     class Device : public ::alina::Device {
     public:
         Device(glLoadFunction fn);
-    private:
-        GladGLContext mContext;
+        bool beginFrame() override;
+        void endFrame() override;
+        Buffer* createBuffer(const BufferDesc& desc) override;
+        GladGLContext context;
     };
 }
