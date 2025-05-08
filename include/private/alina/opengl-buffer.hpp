@@ -9,9 +9,10 @@ namespace alina::opengl {
     public:
         Buffer(const BufferDesc& desc, Device* device);
         BufferType getType() const override {return mType;}
-    private:
+
         Device* mDevice;
         BufferType mType;
         uint32_t mID;
+        size_t size = 0;
     };
 }

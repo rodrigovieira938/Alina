@@ -11,16 +11,30 @@ namespace alina::opengl {
         struct DrawIndexed {
             DrawArguments args;
         };
+        struct WriteBuffer {
+            Buffer* buffer; 
+            const void* data;
+            size_t size;
+            size_t offset;
+        };
+        struct ClearBuffer {
+            Buffer* buffer;
+            uint32_t clearValue;
+        };
     };
     class CommandList : public ::alina::CommandList {
     public:
         using Command = std::variant<
             Commands::Draw,
-            Commands::DrawIndexed
+            Commands::DrawIndexed,
+            Commands::WriteBuffer,
+            Commands::ClearBuffer
         >;
         void begin() override;
         void draw(const DrawArguments& drawArgs) override;
         void drawIndexed(const DrawArguments& drawArgs) override;
+        void writeBuffer(Buffer* buffer, const void* data, size_t size, size_t offset) override;
+        void clearBuffer(Buffer* buffer, uint32_t clearValue) override;
         void end() override;
         std::vector<Command> commands = {};
         bool doneRecording = false;

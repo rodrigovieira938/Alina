@@ -19,6 +19,20 @@ namespace alina::opengl {
             }
         );
     }
+    void CommandList::writeBuffer(Buffer* buffer, const void* data, size_t size, size_t offset) {
+        commands.emplace_back(
+            Commands::WriteBuffer {
+                buffer, data, size, offset
+            }
+        );
+    }
+    void CommandList::clearBuffer(Buffer* buffer, uint32_t clearValue) {
+        commands.emplace_back(
+            Commands::ClearBuffer {
+                buffer,clearValue
+            }
+        );
+    }
     void CommandList::end() {
         doneRecording = true;
     }

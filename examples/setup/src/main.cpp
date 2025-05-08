@@ -24,17 +24,25 @@ int main(void)
     glfwMakeContextCurrent(window);
 
     auto device = alina::opengl::CreateDevice(glfwGetProcAddress);
-    auto buffer = device->createBuffer(
+    auto vertex_buffer = device->createBuffer(
         alina::BufferDesc()
             .setDebugName("VertexBuffer1")
             .setType(alina::BufferType::VERTEX)
     );
-    auto cmd = device->createCommandList();
+    auto index_buffer = device->createBuffer(
+        alina::BufferDesc()
+            .setDebugName("IndexBuffer1")
+            .setType(alina::BufferType::INDEX)
+    );
     
-
+    auto cmd = device->createCommandList();
     cmd->begin();
+    cmd->writeBuffer(index_buffer, nullptr, sizeof(uint32_t)*3, 0);
+    cmd->clearBuffer(index_buffer, 1);
+    cmd->writeBuffer(vertex_buffer, nullptr, sizeof(uint32_t)*3, 0);
+    cmd->clearBuffer(vertex_buffer, 2);
     cmd->draw(alina::DrawArguments().setVertexCount(3));
-    cmd->drawIndexed(alina::DrawArguments().setVertexCount(3).setOffset(0));
+    //cmd->drawIndexed(alina::DrawArguments().setVertexCount(3).setOffset(0));
     cmd->end();
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))

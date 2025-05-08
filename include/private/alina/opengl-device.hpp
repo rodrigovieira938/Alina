@@ -11,8 +11,10 @@ namespace alina::opengl {
         void endFrame() override;
         Buffer* createBuffer(const BufferDesc& desc) override;
         ::alina::CommandList* createCommandList() override;
-        void execute(const Commands::Draw& drawCommand);
-        void execute(const Commands::DrawIndexed& drawCommand);
+        void execute(const Commands::Draw& command);
+        void execute(const Commands::DrawIndexed& command);
+        void execute(const Commands::WriteBuffer& command);
+        void execute(const Commands::ClearBuffer& command);
         void execute(::alina::CommandList* cmd) override;
 
         GladGLContext context;

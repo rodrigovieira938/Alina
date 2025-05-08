@@ -36,6 +36,8 @@ namespace alina {
         virtual void begin() = 0;
         virtual void draw(const DrawArguments& drawArgs) = 0;
         virtual void drawIndexed(const DrawArguments& drawArgs) = 0;
+        virtual void writeBuffer(Buffer* buffer, const void* data, size_t size, size_t offset) = 0;
+        virtual void clearBuffer(Buffer* buffer, uint32_t clearValue) = 0;
         virtual void end() = 0;
     };
     class Device {
