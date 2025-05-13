@@ -5,11 +5,13 @@
 #include <alina/opengl-buffer.hpp>
 #include <alina/opengl-commandlist.hpp>
 #include <alina/opengl-conversions.hpp>
+#include <alina/opengl-graphics-pipeline.hpp>
 #include <vector>
 
 namespace alina::opengl {
     Device::Device(glLoadFunction fn) {
         gladLoadGLContext(&context, fn);
+        context.Enable(GL_CULL_FACE);
     }
     bool Device::beginFrame() {
         context.Clear(GL_COLOR_BUFFER_BIT);
@@ -24,7 +26,13 @@ namespace alina::opengl {
     ::alina::CommandList* Device::createCommandList() {
         return new CommandList();
     }
+    ::alina::GraphicsPipeline* Device::createGraphicsPipeline(const GraphicsPipelineDesc& desc) {
+        return new GraphicsPipeline(desc, this);
+    }
 
+    void Device::execute(const Commands::BindGraphicsPipeline& command) {
+        ((GraphicsPipeline*)command.pipeline)->bind();
+    }
     void Device::execute(const Commands::Draw& command) {
         //TODO: change primitive
         context.DrawArrays(GL_TRIANGLES, command.args.offset, command.args.vertexCount);
@@ -35,13 +43,13 @@ namespace alina::opengl {
     }
     void Device::execute(const Commands::WriteBuffer& command) {
         Buffer* buffer = (Buffer*)command.buffer;
-        buffer->size = command.size;
         GLenum bufferType = bufferTypeToGl(buffer->mType); 
         context.BindBuffer(bufferType, buffer->mID);
         if(command.size > buffer->size)
             context.BufferData(bufferType, command.size, command.data, GL_DYNAMIC_DRAW);
         else
             context.BufferSubData(bufferType, command.offset, command.size, command.data);
+        buffer->size = command.size;
         context.BindBuffer(bufferType, 0);
     }
     void Device::execute(const Commands::ClearBuffer& command) {

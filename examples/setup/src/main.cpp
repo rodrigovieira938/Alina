@@ -35,12 +35,25 @@ int main(void)
             .setType(alina::BufferType::INDEX)
     );
     
+    auto pipeline = device->createGraphicsPipeline(alina::GraphicsPipelineDesc());
+
+    float vertices[] = {
+         0.0f,  0.5f, 0.0f,
+        -0.5f, -0.5f, 0.0f,
+         0.5f, -0.5f, 0.0f
+    };
+    uint32_t indices[] {
+        0,1,2
+    };
+
     auto cmd = device->createCommandList();
     cmd->begin();
-    cmd->writeBuffer(index_buffer, nullptr, sizeof(uint32_t)*3, 0);
-    cmd->clearBuffer(index_buffer, 1);
-    cmd->writeBuffer(vertex_buffer, nullptr, sizeof(uint32_t)*3, 0);
-    cmd->clearBuffer(vertex_buffer, 2);
+    cmd->writeBuffer(index_buffer, indices, sizeof(indices), 0);
+    cmd->writeBuffer(vertex_buffer, vertices, sizeof(vertices), 0);
+    cmd->end();
+    device->execute(cmd);
+    cmd->begin();
+    cmd->bindGraphicsPipeline(pipeline);
     cmd->draw(alina::DrawArguments().setVertexCount(3));
     //cmd->drawIndexed(alina::DrawArguments().setVertexCount(3).setOffset(0));
     cmd->end();

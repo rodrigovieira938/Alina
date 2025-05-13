@@ -12,6 +12,13 @@ namespace alina::opengl {
             }
         );
     }
+    void CommandList::bindGraphicsPipeline(alina::GraphicsPipeline* pipeline) {
+        commands.emplace_back(
+            Commands::BindGraphicsPipeline {
+                pipeline
+            }
+        );
+    }
     void CommandList::drawIndexed(const DrawArguments& drawArgs) {
         commands.emplace_back(
             Commands::DrawIndexed {
