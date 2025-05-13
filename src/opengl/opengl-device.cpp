@@ -7,6 +7,7 @@
 #include <alina/opengl-conversions.hpp>
 #include <alina/opengl-graphics-pipeline.hpp>
 #include <alina/opengl-inputlayout.hpp>
+#include <alina/opengl-shader.hpp>
 #include <vector>
 
 namespace alina::opengl {
@@ -26,6 +27,9 @@ namespace alina::opengl {
     }
     ::alina::CommandList* Device::createCommandList() {
         return new CommandList();
+    }
+    ::alina::Shader* Device::createShader(ShaderType type, const void* data, size_t size) {
+        return Shader::createShader(this, type, data, size);
     }
     ::alina::InputLayout* Device::createInputLayout(const VertexAttributeDesc* attrs, size_t size) {
         return new InputLayout(attrs, size);

@@ -100,15 +100,26 @@ namespace alina {
         virtual VertexAttributeDesc* getAttributes() = 0;
         virtual size_t getNumAttributes() = 0;
     };
+    enum class ShaderType {
+        //TODO: add more
+        VERTEX,
+        FRAGMENT
+    };
+    class Shader {
+        virtual ShaderType getType() = 0;
+    };
     //Simple graphics pipeline desc, must be expanded
     struct GraphicsPipelineDesc {
         PrimitiveType primType = PrimitiveType::TriangleList;
         RenderState renderState;
-        InputLayout* inputLayout;
+        InputLayout* inputLayout = nullptr;
+        Shader *vs = nullptr,*fs = nullptr;
 
         GraphicsPipelineDesc& setPrimType(PrimitiveType type) { primType = type; return *this; }
         GraphicsPipelineDesc& setRenderState(RenderState state) { renderState = state; return *this; }
         GraphicsPipelineDesc& setInputLayout(InputLayout* value) { inputLayout = value; return *this; }
+        GraphicsPipelineDesc& setVertexShader(Shader* value) { vs = value; return *this; }
+        GraphicsPipelineDesc& setFragmentShader(Shader* value) { fs = value; return *this; }
     };
     class GraphicsPipeline {
     };
@@ -148,6 +159,8 @@ namespace alina {
         virtual CommandList* createCommandList() = 0;
         virtual InputLayout* createInputLayout(const VertexAttributeDesc* attrs, size_t size) = 0;
         inline InputLayout* createInputLayout(const std::vector<VertexAttributeDesc>& attrs) {return createInputLayout(attrs.data(), attrs.size());}
+        //Raw Shader data, for opengl -> glsl text, for vulkan -> spirv
+        virtual Shader* createShader(ShaderType type, const void* data, size_t size) = 0;
         virtual GraphicsPipeline* createGraphicsPipeline(const GraphicsPipelineDesc& desc) = 0;
         virtual void execute(CommandList* cmd) = 0;
     };

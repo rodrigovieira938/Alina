@@ -41,4 +41,13 @@ namespace alina::opengl {
         }
         return -1;
     }
+    GLenum shaderTypeToGl(const ShaderType& type) {
+        switch(type) {
+        case ShaderType::VERTEX:
+            return GL_VERTEX_SHADER;
+        case ShaderType::FRAGMENT:
+            return GL_FRAGMENT_SHADER;
+        }
+        return -1;
+    }
 }

@@ -8,7 +8,7 @@ namespace alina::opengl {
         GraphicsPipeline(GraphicsPipelineDesc desc, Device* device);
         void bind();
 
-        uint32_t vertexArray;
+        uint32_t vertexArray, program = 0;
         GraphicsPipelineDesc desc;
         Device* device;
     };

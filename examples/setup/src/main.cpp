@@ -1,6 +1,7 @@
 #include "alina/opengl.hpp"
 #include <GLFW/glfw3.h>
 #include <alina/alina.hpp>
+#include <cstring>
 
 void test();
 
@@ -36,7 +37,28 @@ int main(void)
             .setType(alina::BufferType::INDEX)
     );
     
-    auto pipeline = device->createGraphicsPipeline(alina::GraphicsPipelineDesc());
+    const char* vertex_source = R"(
+        #version 460 core
+        layout (location = 0) in vec3 pos;
+        void main()
+        {
+            gl_Position = vec4(pos, 1.0);
+        }
+    )";
+    const char* fragment_source = R"(
+        #version 460 core
+        layout (location = 0) out vec4 fragColor;
+        
+        void main()
+        {
+            fragColor = vec4(1.0, 1.0, 0.0, 1.0);
+        }
+    )";
+
+    auto vs = device->createShader(alina::ShaderType::VERTEX, vertex_source, std::strlen(vertex_source));
+    auto fs = device->createShader(alina::ShaderType::FRAGMENT, fragment_source, std::strlen(fragment_source));
+    
+    auto pipeline = device->createGraphicsPipeline(alina::GraphicsPipelineDesc().setVertexShader(vs).setFragmentShader(fs));
 
     float vertices[] = {
          0.0f,  0.5f, 0.0f,
