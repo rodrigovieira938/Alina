@@ -127,9 +127,11 @@ namespace alina {
     {
         uint32_t vertexCount = 0;
         uint32_t offset = 0;
+        uint32_t instanceCount = 1;
 
         DrawArguments& setVertexCount(uint32_t value) { vertexCount = value; return *this; }
         DrawArguments& setOffset(uint32_t value) { offset = value; return *this; }
+        DrawArguments& setInstanceCount(uint32_t value) { instanceCount = value; return *this; }
     };
     struct BindVertexBuffer {
         Buffer* buffer = 0;

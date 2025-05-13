@@ -25,7 +25,7 @@ namespace alina::opengl {
             context.EnableVertexArrayAttrib(vertexArray, i);
             context.VertexArrayAttribFormat(vertexArray, i, attr.arraySize, vertexAttrFormatToGl(attr.format), GL_FALSE, attr.offset);
             context.VertexArrayAttribBinding(vertexArray, i, attr.bufferIndex);
-            context.VertexAttribDivisor(i, attr.isInstanced ? 1 : 0);
+            context.VertexArrayBindingDivisor(vertexArray, i, attr.isInstanced ? 1 : 0);
         }
         if(desc.vs != nullptr || desc.fs != nullptr) {
             this->program = device->context.CreateProgram();

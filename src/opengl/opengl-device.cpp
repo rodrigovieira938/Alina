@@ -56,11 +56,11 @@ namespace alina::opengl {
     }
     void Device::execute(const Commands::Draw& command) {
         //TODO: change primitive
-        context.DrawArrays(GL_TRIANGLES, command.args.offset, command.args.vertexCount);
+        context.DrawArraysInstanced(GL_TRIANGLES, command.args.offset, command.args.vertexCount, command.args.instanceCount);
     }
     void Device::execute(const Commands::DrawIndexed& command) {
         //TODO: change primitive
-        context.DrawElementsBaseVertex(GL_TRIANGLES, command.args.vertexCount, GL_UNSIGNED_INT, nullptr, command.args.offset);
+        context.DrawElementsInstancedBaseVertex(GL_TRIANGLES, command.args.vertexCount, GL_UNSIGNED_INT, nullptr, command.args.instanceCount, command.args.offset);
     }
     void Device::execute(const Commands::WriteBuffer& command) {
         Buffer* buffer = (Buffer*)command.buffer;
