@@ -19,6 +19,13 @@ namespace alina::opengl {
             }
         );
     }
+    void CommandList::bindVertexBuffers(const std::vector<BindVertexBuffer>& buffers) {
+        commands.emplace_back(
+            Commands::BindVertexBuffers {
+                buffers
+            }
+        );
+    }
     void CommandList::drawIndexed(const DrawArguments& drawArgs) {
         commands.emplace_back(
             Commands::DrawIndexed {

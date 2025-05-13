@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <stdint.h>
+#include <vector>
 
 namespace alina {
     enum class BufferType {
@@ -71,13 +72,43 @@ namespace alina {
 
         RenderState& setRasterState(const RasterState& value) { rasterState = value; return *this; }
     };
+    enum class VertexAttributeFormat {
+        Int,
+        Unsigned_Int,
+        Float,
+    };
+    struct VertexAttributeDesc {
+        std::string name;
+        uint32_t bufferIndex = 0;
+        uint32_t arraySize = 1;
+        uint32_t offset = 0;
+        uint32_t stride = 0;
+        bool isInstanced = false;
+        VertexAttributeFormat format;
+
+        VertexAttributeDesc& setName(std::string value) {name = value; return *this;}
+        VertexAttributeDesc& setBufferIndex(uint32_t value) {bufferIndex = value; return *this;}
+        VertexAttributeDesc& setArraySize(uint32_t value) {arraySize = value; return *this;}
+        VertexAttributeDesc& setOffset(uint32_t value) {bufferIndex = value; return *this;}
+        VertexAttributeDesc& setStride(uint32_t value) {stride = value; return *this;}
+        VertexAttributeDesc& setFormat(VertexAttributeFormat value) {format = value; return *this;}
+        VertexAttributeDesc& setInstanced(bool value) {isInstanced = value; return *this;}
+
+    };
+    class InputLayout {
+    public:
+        virtual VertexAttributeDesc* getAttributes() = 0;
+        virtual size_t getNumAttributes() = 0;
+    };
     //Simple graphics pipeline desc, must be expanded
     struct GraphicsPipelineDesc {
         PrimitiveType primType = PrimitiveType::TriangleList;
         RenderState renderState;
+        InputLayout* inputLayout;
 
         GraphicsPipelineDesc& setPrimType(PrimitiveType type) { primType = type; return *this; }
         GraphicsPipelineDesc& setRenderState(RenderState state) { renderState = state; return *this; }
+        GraphicsPipelineDesc& setInputLayout(InputLayout* value) { inputLayout = value; return *this; }
     };
     class GraphicsPipeline {
     };
@@ -89,10 +120,19 @@ namespace alina {
         DrawArguments& setVertexCount(uint32_t value) { vertexCount = value; return *this; }
         DrawArguments& setOffset(uint32_t value) { offset = value; return *this; }
     };
+    struct BindVertexBuffer {
+        Buffer* buffer = 0;
+        uint32_t offset = 0, stride = 0;
+
+        BindVertexBuffer& setBuffer(Buffer*  value) {buffer = value; return *this;}
+        BindVertexBuffer& setOffset(uint32_t value) {offset = value; return *this;}
+        BindVertexBuffer& setStride(uint32_t value) {stride = value; return *this;}
+    };
     class CommandList {
     public:
         virtual void begin() = 0;
         virtual void bindGraphicsPipeline(GraphicsPipeline* pipeline) = 0;
+        virtual void bindVertexBuffers(const std::vector<BindVertexBuffer>& buffers) = 0;
         virtual void draw(const DrawArguments& drawArgs) = 0;
         virtual void drawIndexed(const DrawArguments& drawArgs) = 0;
         virtual void writeBuffer(Buffer* buffer, const void* data, size_t size, size_t offset) = 0;
@@ -105,6 +145,8 @@ namespace alina {
         virtual void endFrame() = 0;
         virtual Buffer* createBuffer(const BufferDesc& desc) = 0;
         virtual CommandList* createCommandList() = 0;
+        virtual InputLayout* createInputLayout(const VertexAttributeDesc* attrs, size_t size) = 0;
+        inline InputLayout* createInputLayout(const std::vector<VertexAttributeDesc>& attrs) {return createInputLayout(attrs.data(), attrs.size());}
         virtual GraphicsPipeline* createGraphicsPipeline(const GraphicsPipelineDesc& desc) = 0;
         virtual void execute(CommandList* cmd) = 0;
     };

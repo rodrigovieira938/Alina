@@ -24,6 +24,9 @@ namespace alina::opengl {
         struct BindGraphicsPipeline {
             alina::GraphicsPipeline* pipeline;
         };
+        struct BindVertexBuffers {
+            std::vector<BindVertexBuffer> buffers;
+        };
     };
     class CommandList : public ::alina::CommandList {
     public:
@@ -32,10 +35,12 @@ namespace alina::opengl {
             Commands::DrawIndexed,
             Commands::WriteBuffer,
             Commands::ClearBuffer,
-            Commands::BindGraphicsPipeline
+            Commands::BindGraphicsPipeline,
+            Commands::BindVertexBuffers
         >;
         void begin() override;
         void bindGraphicsPipeline(alina::GraphicsPipeline* pipeline) override;
+        void bindVertexBuffers(const std::vector<BindVertexBuffer>& buffers) override;
         void draw(const DrawArguments& drawArgs) override;
         void drawIndexed(const DrawArguments& drawArgs) override;
         void writeBuffer(Buffer* buffer, const void* data, size_t size, size_t offset) override;

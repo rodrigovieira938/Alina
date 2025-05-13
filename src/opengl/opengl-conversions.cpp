@@ -30,4 +30,15 @@ namespace alina::opengl {
         }
         return -1;
     }
+    GLenum vertexAttrFormatToGl(const VertexAttributeFormat& format) {
+        switch (format) {
+        case VertexAttributeFormat::Int:
+            return GL_INT;
+        case VertexAttributeFormat::Unsigned_Int:
+            return GL_UNSIGNED_INT;
+        case VertexAttributeFormat::Float:
+            return GL_FLOAT;
+        }
+        return -1;
+    }
 }

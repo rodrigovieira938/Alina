@@ -5,4 +5,5 @@ namespace alina::opengl {
     GLenum bufferTypeToGl(const BufferType& type);
     GLenum rasterFillModeToGl(const RasterFillMode& mode);
     GLenum rasterCullModeToGl(const RasterCullMode& mode);
+    GLenum vertexAttrFormatToGl(const VertexAttributeFormat& format);
 }

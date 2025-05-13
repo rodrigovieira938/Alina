@@ -6,6 +6,7 @@
 #include <alina/opengl-commandlist.hpp>
 #include <alina/opengl-conversions.hpp>
 #include <alina/opengl-graphics-pipeline.hpp>
+#include <alina/opengl-inputlayout.hpp>
 #include <vector>
 
 namespace alina::opengl {
@@ -26,12 +27,24 @@ namespace alina::opengl {
     ::alina::CommandList* Device::createCommandList() {
         return new CommandList();
     }
+    ::alina::InputLayout* Device::createInputLayout(const VertexAttributeDesc* attrs, size_t size) {
+        return new InputLayout(attrs, size);
+    }
     ::alina::GraphicsPipeline* Device::createGraphicsPipeline(const GraphicsPipelineDesc& desc) {
         return new GraphicsPipeline(desc, this);
     }
 
     void Device::execute(const Commands::BindGraphicsPipeline& command) {
-        ((GraphicsPipeline*)command.pipeline)->bind();
+        currentPipeline = (GraphicsPipeline*)command.pipeline;
+        currentPipeline->bind();
+    }
+    void Device::execute(const Commands::BindVertexBuffers& command) {
+        for(int i = 0; i < command.buffers.size(); i++) {
+            alina::BindVertexBuffer bindBuffer = command.buffers[i]; 
+            Buffer* buffer = (Buffer*)bindBuffer.buffer;
+            //context.BindVertexBuffer(i, buffer->mID, bindBuffer.offset, bindBuffer.offset);
+            context.VertexArrayVertexBuffer(currentPipeline->vertexArray, i, buffer->mID, bindBuffer.offset, bindBuffer.stride);
+        }
     }
     void Device::execute(const Commands::Draw& command) {
         //TODO: change primitive

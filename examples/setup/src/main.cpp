@@ -11,7 +11,8 @@ int main(void)
     /* Initialize the library */
     if (!glfwInit())
         return -1;
-
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(640, 480, "Alina Setup Example", NULL, NULL);
     if (!window)
@@ -54,6 +55,7 @@ int main(void)
     device->execute(cmd);
     cmd->begin();
     cmd->bindGraphicsPipeline(pipeline);
+    cmd->bindVertexBuffers({alina::BindVertexBuffer().setBuffer(vertex_buffer).setStride(sizeof(float) * 3)});
     cmd->draw(alina::DrawArguments().setVertexCount(3));
     //cmd->drawIndexed(alina::DrawArguments().setVertexCount(3).setOffset(0));
     cmd->end();

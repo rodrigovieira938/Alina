@@ -1,6 +1,7 @@
 #pragma once
 #include <alina/opengl.hpp>
 #include <alina/opengl-commandlist.hpp>
+#include <alina/opengl-graphics-pipeline.hpp>
 #include <glad/gl.h>
 
 namespace alina::opengl {
@@ -11,14 +12,18 @@ namespace alina::opengl {
         void endFrame() override;
         Buffer* createBuffer(const BufferDesc& desc) override;
         ::alina::CommandList* createCommandList() override;
+        ::alina::InputLayout* createInputLayout(const VertexAttributeDesc* attrs, size_t size) override;
+        inline ::alina::InputLayout* createInputLayout(const std::vector<VertexAttributeDesc>& attrs) {return createInputLayout(attrs.data(), attrs.size());}
         ::alina::GraphicsPipeline* createGraphicsPipeline(const GraphicsPipelineDesc& desc) override; 
         void execute(const Commands::BindGraphicsPipeline& command);
+        void execute(const Commands::BindVertexBuffers& command);
         void execute(const Commands::Draw& command);
         void execute(const Commands::DrawIndexed& command);
         void execute(const Commands::WriteBuffer& command);
         void execute(const Commands::ClearBuffer& command);
         void execute(::alina::CommandList* cmd) override;
 
+        GraphicsPipeline* currentPipeline;
         GladGLContext context;
     };
 }
