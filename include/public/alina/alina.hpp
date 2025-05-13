@@ -133,6 +133,7 @@ namespace alina {
         virtual void begin() = 0;
         virtual void bindGraphicsPipeline(GraphicsPipeline* pipeline) = 0;
         virtual void bindVertexBuffers(const std::vector<BindVertexBuffer>& buffers) = 0;
+        virtual void bindIndexBuffer(Buffer* buffer) = 0;
         virtual void draw(const DrawArguments& drawArgs) = 0;
         virtual void drawIndexed(const DrawArguments& drawArgs) = 0;
         virtual void writeBuffer(Buffer* buffer, const void* data, size_t size, size_t offset) = 0;

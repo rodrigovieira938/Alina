@@ -17,6 +17,7 @@ namespace alina::opengl {
         ::alina::GraphicsPipeline* createGraphicsPipeline(const GraphicsPipelineDesc& desc) override; 
         void execute(const Commands::BindGraphicsPipeline& command);
         void execute(const Commands::BindVertexBuffers& command);
+        void execute(const Commands::BindIndexBuffer& command);
         void execute(const Commands::Draw& command);
         void execute(const Commands::DrawIndexed& command);
         void execute(const Commands::WriteBuffer& command);

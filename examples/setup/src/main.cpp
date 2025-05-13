@@ -56,8 +56,9 @@ int main(void)
     cmd->begin();
     cmd->bindGraphicsPipeline(pipeline);
     cmd->bindVertexBuffers({alina::BindVertexBuffer().setBuffer(vertex_buffer).setStride(sizeof(float) * 3)});
+    cmd->bindIndexBuffer(index_buffer);
     cmd->draw(alina::DrawArguments().setVertexCount(3));
-    //cmd->drawIndexed(alina::DrawArguments().setVertexCount(3).setOffset(0));
+    cmd->drawIndexed(alina::DrawArguments().setVertexCount(3));
     cmd->end();
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))

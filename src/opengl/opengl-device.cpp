@@ -46,6 +46,10 @@ namespace alina::opengl {
             context.VertexArrayVertexBuffer(currentPipeline->vertexArray, i, buffer->mID, bindBuffer.offset, bindBuffer.stride);
         }
     }
+    void Device::execute(const Commands::BindIndexBuffer& command) {
+        Buffer* buffer = (Buffer*)command.buffer;
+        context.BindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->mID);
+    }
     void Device::execute(const Commands::Draw& command) {
         //TODO: change primitive
         context.DrawArrays(GL_TRIANGLES, command.args.offset, command.args.vertexCount);

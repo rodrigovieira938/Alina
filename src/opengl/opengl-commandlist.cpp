@@ -26,6 +26,13 @@ namespace alina::opengl {
             }
         );
     }
+    void CommandList::bindIndexBuffer(Buffer* buffer) {
+        commands.emplace_back(
+            Commands::BindIndexBuffer {
+                buffer
+            }
+        );
+    }
     void CommandList::drawIndexed(const DrawArguments& drawArgs) {
         commands.emplace_back(
             Commands::DrawIndexed {
