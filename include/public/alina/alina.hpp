@@ -175,19 +175,54 @@ namespace alina {
 
         #undef FORMAT
     };
-    //TODO: add clearColor, add samplerDesc and sampler object
+    enum class TextureFilter {
+        // Samples the same as in the texture  
+        Point,
+        // Samples are averaged
+        Bilinear,
+        // Sample are averaged and blended between mipmaps
+        Trilinear
+    };
+    enum class TextureWrap {
+        Repeat,
+        MirroredRepeat,
+        ClampToEdge,
+        ClampToBorder,
+    };
+    struct Color {
+        float r=.0f,g=.0f,b=.0f,a = 1.0;
+    };
+    struct SamplerDesc {
+        TextureFilter filter = TextureFilter::Bilinear;
+        bool minFilter = true, magFilter = true, mipFilter = true;
+        TextureWrap u = TextureWrap::ClampToEdge,v = TextureWrap::ClampToEdge,w = TextureWrap::ClampToEdge;
+        Color border = {1,1,1,1};
+
+        SamplerDesc& setFilter(TextureFilter value) {filter = value; return *this;}
+        SamplerDesc& setAllFilters(bool value) {minFilter = magFilter = mipFilter = value; return *this;}
+        SamplerDesc& setMinFilter(bool value) {minFilter = value; return *this;}
+        SamplerDesc& setMagFilter(bool value) {magFilter = value; return *this;}
+        SamplerDesc& setMipFilter(bool value) {mipFilter = value; return *this;}
+        SamplerDesc& setAllWraps(TextureWrap value) {u = v = w = value; return *this;}
+        SamplerDesc& setUWrap(TextureWrap value) {u = value; return *this;}
+        SamplerDesc& setVWrap(TextureWrap value) {v = value; return *this;}
+        SamplerDesc& setWWrap(TextureWrap value) {w = value; return *this;}
+    };
+    //TODO: add clearColor and sampler object
     struct TextureDesc {
         TextureFormat format = TextureFormat::RGB8_Unorm;
         uint32_t width = 1, height = 1;
         uint32_t depth = 1;
         // 0 -> none
         uint32_t mipLevels = 0;
+        SamplerDesc sampler;
 
         TextureDesc& setFormat(TextureFormat value) {format = value; return *this;}
         TextureDesc& setWidth(uint32_t value) {width = value; return *this;}
         TextureDesc& setHeight(uint32_t value) {height = value; return *this;}
         TextureDesc& setDepth(uint32_t value) {width = value; return *this;}
         TextureDesc& setMipLevels(uint32_t value) {mipLevels = value; return *this;}
+        TextureDesc& setSampler(const SamplerDesc& value) {sampler = value; return *this;}
     };
     class Texture {
     public:

@@ -1,5 +1,6 @@
 #include "alina/alina.hpp"
 #include "glad/gl.h"
+#include <GL/gl.h>
 #include <GL/glext.h>
 #include <alina/opengl-conversions.hpp>
 namespace alina::opengl {
@@ -152,5 +153,32 @@ namespace alina::opengl {
         }
         return -1;
     }
-
+    GLenum textureFilterToGl(const TextureFilter& filter, bool mips) {
+        switch(filter) {
+        case TextureFilter::Point:
+            if(mips)
+                return GL_NEAREST_MIPMAP_NEAREST;
+            return GL_NEAREST;
+        case TextureFilter::Bilinear:
+            if(mips)
+                return GL_NEAREST_MIPMAP_LINEAR;
+            return GL_LINEAR;
+        case TextureFilter::Trilinear:
+            return GL_LINEAR_MIPMAP_LINEAR;
+        }
+        return -1;
+    }
+    GLenum textureWrapToGl(const TextureWrap& wrap) {
+        switch(wrap) {
+        case TextureWrap::Repeat:
+            return GL_REPEAT;
+        case TextureWrap::MirroredRepeat:
+            return GL_MIRRORED_REPEAT;
+        case TextureWrap::ClampToEdge:
+            return GL_CLAMP_TO_EDGE;
+        case TextureWrap::ClampToBorder:
+            return GL_CLAMP_TO_BORDER;
+        }
+        return -1;
+    }
 }
