@@ -8,4 +8,6 @@ namespace alina::opengl {
     GLenum vertexAttrFormatToGl(const VertexAttributeFormat& format);
     GLenum shaderTypeToGl(const ShaderType& type);
     GLenum textureFormatsToGl(const TextureFormat& format);
+    GLenum textureFormatsToGlChannels(const TextureFormat& format);
+    GLenum textureFormatsToGlType(const TextureFormat& format);
 }

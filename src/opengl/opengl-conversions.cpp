@@ -56,10 +56,6 @@ namespace alina::opengl {
     }
     GLenum textureFormatsToGl(const TextureFormat& format) {
         switch(format) {
-            #define API_FORMAT_R(type, bits) GL_R ## bits ## _ ## type
-            #define API_FORMAT_RG(type, bits) GL_RG ## bits ## _ ## type
-            #define API_FORMAT_RGB(type, bits) GL_RGB ## bits ## _ ## type
-            #define API_FORMAT_RGBA(type, bits) GL_RGBA ## bits ## _ ## type
             #define FORMAT(type, bits, apitype) \
             case TextureFormat::R    ## bits ## _ ## type: return GL_R ## bits ## _ ## apitype; \
             case TextureFormat::RG   ## bits ## _ ## type: return GL_RG ## bits ## _ ## apitype; \
@@ -90,6 +86,9 @@ namespace alina::opengl {
             FORMAT3(Unorm, 16, F, 32)
             FORMAT3(Float, 16, F, 32)
             FORMAT2(Float, 32, F)
+            #undef FORMAT
+            #undef FORMAT2
+            #undef FORMAT3
             case TextureFormat::SRGB8:
                 return GL_SRGB8;
             case TextureFormat::SRGBA8:
@@ -97,4 +96,61 @@ namespace alina::opengl {
         }
         return -1;
     }
+    //TODO: handle unsupported formats
+    GLenum textureFormatsToGlChannels(const TextureFormat& format) {
+        switch(format) {
+            #define FORMAT(type, bits) \
+            case TextureFormat::R    ## bits ## _ ## type: return GL_RED; \
+            case TextureFormat::RG   ## bits ## _ ## type: return GL_RG; \
+            case TextureFormat::RGB  ## bits ## _ ## type: return GL_RGB; \
+            case TextureFormat::RGBA ## bits ## _ ## type: return GL_RGBA;
+            FORMAT(Sint, 8)
+            FORMAT(Sint, 16)
+            FORMAT(Sint, 32)
+            FORMAT(Uint, 8)
+            FORMAT(Uint, 16)
+            FORMAT(Uint, 32)
+            FORMAT(Snorm, 8)
+            FORMAT(Snorm, 16)
+            FORMAT(Unorm, 8)
+            FORMAT(Unorm, 16)
+            FORMAT(Float, 16)
+            FORMAT(Float, 32)
+            #undef FORMAT
+            case TextureFormat::SRGB8:
+                return GL_RGB;
+            case TextureFormat::SRGBA8:
+                return GL_RGBA;
+        }
+        return -1;
+    }
+    //TODO: handle unsupported formats
+    GLenum textureFormatsToGlType(const TextureFormat& format) {
+        switch(format) {
+            #define FORMAT(type, bits, rtype) \
+            case TextureFormat::R    ## bits ## _ ## type: return rtype; \
+            case TextureFormat::RG   ## bits ## _ ## type: return rtype; \
+            case TextureFormat::RGB  ## bits ## _ ## type: return rtype; \
+            case TextureFormat::RGBA ## bits ## _ ## type: return rtype;
+            FORMAT(Sint, 8, GL_BYTE)
+            FORMAT(Sint, 16, GL_SHORT)
+            FORMAT(Sint, 32, GL_INT)
+            FORMAT(Uint, 8, GL_UNSIGNED_INT)
+            FORMAT(Uint, 16, GL_UNSIGNED_SHORT)
+            FORMAT(Uint, 32, GL_UNSIGNED_INT)
+            FORMAT(Snorm, 8, GL_BYTE)
+            FORMAT(Snorm, 16, GL_SHORT)
+            FORMAT(Unorm, 8, GL_UNSIGNED_BYTE)
+            FORMAT(Unorm, 16, GL_UNSIGNED_SHORT)
+            FORMAT(Float, 16, GL_HALF_FLOAT)
+            FORMAT(Float, 32, GL_FLOAT)
+            #undef FORMAT
+            case TextureFormat::SRGB8:
+                return GL_RGB;
+            case TextureFormat::SRGBA8:
+                return GL_RGBA;
+        }
+        return -1;
+    }
+
 }

@@ -114,7 +114,7 @@ namespace alina::opengl {
     //TODO: add support for conversion from unsupported formats
     void Device::execute(const Commands::WriteTexture& command) {
         auto tex = ((Texture*)command.tex);
-        context.TextureSubImage2D(tex->id, 0, 0, 0, tex->desc.width, tex->desc.height, textureFormatsToGl(tex->desc.format), GL_TEXTURE_2D, command.data);
+        context.TextureSubImage2D(tex->id, 0, 0, 0, tex->desc.width, tex->desc.height, textureFormatsToGlChannels(command.dataFormat), textureFormatsToGlType(command.dataFormat), command.data);
     }
 
     void Device::execute(::alina::CommandList* cmd) {
