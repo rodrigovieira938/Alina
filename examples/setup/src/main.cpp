@@ -3,8 +3,6 @@
 #include <alina/alina.hpp>
 #include <cstring>
 
-void test();
-
 int main(void)
 {
     GLFWwindow* window;
@@ -13,7 +11,7 @@ int main(void)
     if (!glfwInit())
         return -1;
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(640, 480, "Alina Setup Example", NULL, NULL);
     if (!window)
@@ -63,7 +61,7 @@ int main(void)
     device->execute(cmd);
     
     const char* vertex_source = R"(
-        #version 460 core
+        #version 330 core
         layout (location = 0) in vec3 aPos;
         layout (location = 1) in vec4 aColor;
 
@@ -78,7 +76,7 @@ int main(void)
         }
     )";
     const char* fragment_source = R"(
-        #version 460 core
+        #version 330 core
         layout (location = 0) out vec4 fragColor;
         
         in vec4 oColor;
