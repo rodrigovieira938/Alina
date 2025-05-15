@@ -19,6 +19,13 @@ namespace alina::opengl {
             }
         );
     }
+    void CommandList::bindShaderResources(const ShaderResources& shaderResouces) {
+        commands.emplace_back(
+            Commands::BindShaderResources {
+                shaderResouces
+            }
+        );
+    }
     void CommandList::bindVertexBuffers(const std::vector<BindVertexBuffer>& buffers) {
         commands.emplace_back(
             Commands::BindVertexBuffers {

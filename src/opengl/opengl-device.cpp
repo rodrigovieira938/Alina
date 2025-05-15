@@ -42,6 +42,14 @@ namespace alina::opengl {
         currentPipeline = (GraphicsPipeline*)command.pipeline;
         currentPipeline->bind();
     }
+    void Device::execute(const Commands::BindShaderResources& command) {
+        for(auto& ubo : command.shaderResources.uboBinding) {
+            auto buffer = ((Buffer*)ubo.buffer);
+            //TODO: deal with bindings
+            context.BindBufferBase(GL_UNIFORM_BUFFER, ubo.binding, buffer->mID);
+        }
+    }
+
     void Device::execute(const Commands::BindVertexBuffers& command) {
         for(int i = 0; i < command.buffers.size(); i++) {
             alina::BindVertexBuffer bindBuffer = command.buffers[i]; 

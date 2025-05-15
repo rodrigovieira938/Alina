@@ -30,6 +30,9 @@ namespace alina::opengl {
         struct BindIndexBuffer {
             Buffer* buffer;
         };
+        struct BindShaderResources {
+            const ShaderResources& shaderResources;
+        };
     };
     class CommandList : public ::alina::CommandList {
     public:
@@ -40,10 +43,12 @@ namespace alina::opengl {
             Commands::ClearBuffer,
             Commands::BindGraphicsPipeline,
             Commands::BindVertexBuffers,
-            Commands::BindIndexBuffer
+            Commands::BindIndexBuffer,
+            Commands::BindShaderResources
         >;
         void begin() override;
         void bindGraphicsPipeline(alina::GraphicsPipeline* pipeline) override;
+        void bindShaderResources(const ShaderResources& shaderResouces) override;
         void bindVertexBuffers(const std::vector<BindVertexBuffer>& buffers) override;
         void bindIndexBuffer(Buffer* buffer) override;
         void draw(const DrawArguments& drawArgs) override;

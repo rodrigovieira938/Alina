@@ -142,10 +142,24 @@ namespace alina {
         BindVertexBuffer& setOffset(uint32_t value) {offset = value; return *this;}
         BindVertexBuffer& setStride(uint32_t value) {stride = value; return *this;}
     };
+    struct UniformBufferBinding {
+        Buffer* buffer = nullptr;
+        uint32_t set = 0, binding = 0;
+        
+        UniformBufferBinding& setBuffer(Buffer* value) {buffer = value; return *this;}
+        UniformBufferBinding& setSet(uint32_t value) {set = value; return *this;}
+        UniformBufferBinding& setBinding(uint32_t value) {binding = value; return *this;}
+    };
+    struct ShaderResources {
+        std::vector<UniformBufferBinding> uboBinding;
+
+        ShaderResources& setUboBindings(const std::vector<UniformBufferBinding> value) {uboBinding = value; return *this;}
+    };
     class CommandList {
     public:
         virtual void begin() = 0;
         virtual void bindGraphicsPipeline(GraphicsPipeline* pipeline) = 0;
+        virtual void bindShaderResources(const ShaderResources& shaderResouces) = 0;
         virtual void bindVertexBuffers(const std::vector<BindVertexBuffer>& buffers) = 0;
         virtual void bindIndexBuffer(Buffer* buffer) = 0;
         virtual void draw(const DrawArguments& drawArgs) = 0;

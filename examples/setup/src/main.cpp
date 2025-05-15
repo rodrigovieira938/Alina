@@ -54,7 +54,7 @@ int main(void)
         0.0,1.0,0.0,1.0,
         0.0,0.0,1.0,1.0,
     };
-    float size= 1.0f;
+    float size= 0.5f;
 
 
     auto cmd = device->createCommandList();
@@ -73,7 +73,7 @@ int main(void)
 
         out vec4 oColor;
 
-        layout (std140, set = 1, binding = 1) uniform ubo
+        layout (std140, binding = 1) uniform ubo
         {
             float size;
         };
@@ -101,7 +101,10 @@ int main(void)
 
     auto vs = device->createShader(alina::ShaderType::VERTEX, vertex_source, std::strlen(vertex_source));
     auto fs = device->createShader(alina::ShaderType::FRAGMENT, fragment_source, std::strlen(fragment_source));
-    
+    auto shaderResources = alina::ShaderResources().setUboBindings({
+        alina::UniformBufferBinding().setBuffer(uniform_buffer).setBinding(1)
+    });
+
     auto pipeline = device->createGraphicsPipeline(
         alina::GraphicsPipelineDesc()
             .setInputLayout(
@@ -116,6 +119,7 @@ int main(void)
 
     cmd->begin();
     cmd->bindGraphicsPipeline(pipeline);
+    cmd->bindShaderResources(shaderResources);
     cmd->bindVertexBuffers({
         alina::BindVertexBuffer().setBuffer(vertex_buffer).setStride(sizeof(float) * 3),
         alina::BindVertexBuffer().setBuffer(color_buffer).setStride(sizeof(float) * 4)
