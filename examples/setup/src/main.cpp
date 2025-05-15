@@ -23,115 +23,15 @@ int main(void)
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
+    /*Creates the device */
     auto device = alina::opengl::CreateDevice(glfwGetProcAddress);
-    auto vertex_buffer = device->createBuffer(
-        alina::BufferDesc()
-            .setDebugName("VertexBuffer1")
-            .setType(alina::BufferType::VERTEX)
-    );
-    auto index_buffer = device->createBuffer(
-        alina::BufferDesc()
-            .setDebugName("IndexBuffer1")
-            .setType(alina::BufferType::INDEX)
-    );
-    auto color_buffer = device->createBuffer(alina::BufferDesc()
-            .setDebugName("VertexBuffer2")
-            .setType(alina::BufferType::VERTEX));
-    auto uniform_buffer = device->createBuffer(alina::BufferDesc()
-        .setDebugName("UniformBuffer1")
-        .setType(alina::BufferType::UNIFORM));
-
-    float vertices[] = {
-         0.0f,  0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f
-    };
-    uint32_t indices[] {
-        0,1,2
-    };
-    float colors[] = {
-        1.0,0.0,0.0,1.0,
-        0.0,1.0,0.0,1.0,
-        0.0,0.0,1.0,1.0,
-    };
-    float size[4] = {0.5f, /*std140 Padding*/0, 0, 0};
-
-
-    auto cmd = device->createCommandList();
-    cmd->begin();
-    cmd->writeBuffer(index_buffer, indices, sizeof(indices), 0);
-    cmd->writeBuffer(vertex_buffer, vertices, sizeof(vertices), 0);
-    cmd->writeBuffer(color_buffer, colors, sizeof(colors), 0);
-    cmd->writeBuffer(uniform_buffer, &size, sizeof(size), 0);
-    cmd->end();
-    device->execute(cmd);
     
-    const char* vertex_source = R"(
-        #version 440 core
-        layout (location = 0) in vec3 aPos;
-        layout (location = 1) in vec4 aColor;
+    // Your rendering code
 
-        out vec4 oColor;
-
-        layout (std140, binding = 1) uniform ubo
-        {
-            float size;
-        };
-
-        void main()
-        {
-            vec4 pos = vec4(aPos, 1.0);
-            pos.x += 0.05 * (gl_InstanceID-1);
-            pos.xyz *= size;
-            gl_Position = pos;
-            oColor = aColor;
-        }
-    )";
-    const char* fragment_source = R"(
-        #version 440 core
-        layout (location = 0) out vec4 fragColor;
-        
-        in vec4 oColor;
-
-        void main()
-        {
-            fragColor = oColor;
-        }
-    )";
-
-    auto vs = device->createShader(alina::ShaderType::VERTEX, vertex_source, std::strlen(vertex_source));
-    auto fs = device->createShader(alina::ShaderType::FRAGMENT, fragment_source, std::strlen(fragment_source));
-    auto shaderResources = alina::ShaderResources().setUboBindings({
-        alina::UniformBufferBinding().setBuffer(uniform_buffer).setBinding(1)
-    });
-
-    auto pipeline = device->createGraphicsPipeline(
-        alina::GraphicsPipelineDesc()
-            .setInputLayout(
-                device->createInputLayout({
-                    alina::VertexAttributeDesc().setFormat(alina::VertexAttributeFormat::Float).setArraySize(3).setStride(sizeof(float) * 3),
-                    alina::VertexAttributeDesc().setFormat(alina::VertexAttributeFormat::Float).setArraySize(4).setStride(sizeof(float) * 4).setBufferIndex(1).setInstanced(true)
-                })
-            )
-            .setVertexShader(vs)
-            .setFragmentShader(fs)
-    );
-
-    cmd->begin();
-    cmd->bindGraphicsPipeline(pipeline);
-    cmd->bindShaderResources(shaderResources);
-    cmd->bindVertexBuffers({
-        alina::BindVertexBuffer().setBuffer(vertex_buffer).setStride(sizeof(float) * 3),
-        alina::BindVertexBuffer().setBuffer(color_buffer).setStride(sizeof(float) * 4)
-    });
-    cmd->bindIndexBuffer(index_buffer);
-    cmd->drawIndexed(alina::DrawArguments().setVertexCount(3).setInstanceCount(3));
-    cmd->end();
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         if(device->beginFrame()) {
-            device->execute(cmd);
             device->endFrame();
             /* Swap front and back buffers */
             glfwSwapBuffers(window);

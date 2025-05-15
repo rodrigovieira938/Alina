@@ -18,6 +18,14 @@ FetchContent_Declare(
   GIT_SHALLOW TRUE
   GIT_PROGRESS TRUE
 )
+FetchContent_Declare(
+  glm
+  GIT_REPOSITORY https://github.com/g-truc/glm
+  GIT_TAG 1.0.1
+  GIT_SHALLOW TRUE
+  GIT_PROGRESS TRUE
+)
+
 FetchContent_MakeAvailable(glad)
 
 glad_add_library(glad STATIC REPRODUCIBLE MX LOADER API gl:core=4.4)
@@ -29,6 +37,6 @@ target_include_directories(alina PUBLIC include/public)
 target_include_directories(alina PRIVATE include/private)
 
 if(${ALINA_BUILD_EXAMPLES})
-FetchContent_MakeAvailable(glfw)
-    add_subdirectory(examples)
+  FetchContent_MakeAvailable(glfw glm)
+  add_subdirectory(examples)
 endif()
