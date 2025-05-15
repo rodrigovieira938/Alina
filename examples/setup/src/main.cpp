@@ -54,7 +54,7 @@ int main(void)
         0.0,1.0,0.0,1.0,
         0.0,0.0,1.0,1.0,
     };
-    float size= 0.5f;
+    float size[4] = {0.5f, /*std140 Padding*/0, 0, 0};
 
 
     auto cmd = device->createCommandList();
