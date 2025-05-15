@@ -6,7 +6,8 @@
 namespace alina {
     enum class BufferType {
         VERTEX,
-        INDEX
+        INDEX,
+        UNIFORM
     };
     struct BufferDesc {
         BufferDesc& setDebugName(std::string name) {

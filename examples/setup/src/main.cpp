@@ -37,6 +37,9 @@ int main(void)
     auto color_buffer = device->createBuffer(alina::BufferDesc()
             .setDebugName("VertexBuffer2")
             .setType(alina::BufferType::VERTEX));
+    auto uniform_buffer = device->createBuffer(alina::BufferDesc()
+        .setDebugName("UniformBuffer1")
+        .setType(alina::BufferType::UNIFORM));
 
     float vertices[] = {
          0.0f,  0.5f, 0.0f,
@@ -51,32 +54,41 @@ int main(void)
         0.0,1.0,0.0,1.0,
         0.0,0.0,1.0,1.0,
     };
+    float size= 1.0f;
+
 
     auto cmd = device->createCommandList();
     cmd->begin();
     cmd->writeBuffer(index_buffer, indices, sizeof(indices), 0);
     cmd->writeBuffer(vertex_buffer, vertices, sizeof(vertices), 0);
     cmd->writeBuffer(color_buffer, colors, sizeof(colors), 0);
+    cmd->writeBuffer(uniform_buffer, &size, sizeof(size), 0);
     cmd->end();
     device->execute(cmd);
     
     const char* vertex_source = R"(
-        #version 330 core
+        #version 440 core
         layout (location = 0) in vec3 aPos;
         layout (location = 1) in vec4 aColor;
 
         out vec4 oColor;
 
+        layout (std140, set = 1, binding = 1) uniform ubo
+        {
+            float size;
+        };
+
         void main()
         {
             vec4 pos = vec4(aPos, 1.0);
             pos.x += 0.05 * (gl_InstanceID-1);
+            pos.xyz *= size;
             gl_Position = pos;
             oColor = aColor;
         }
     )";
     const char* fragment_source = R"(
-        #version 330 core
+        #version 440 core
         layout (location = 0) out vec4 fragColor;
         
         in vec4 oColor;

@@ -7,6 +7,8 @@ namespace alina::opengl {
                 return GL_ARRAY_BUFFER;
             case BufferType::INDEX:
                 return GL_ELEMENT_ARRAY_BUFFER;
+            case BufferType::UNIFORM:
+                return GL_UNIFORM_BUFFER;
         }
         return -1;
     }
