@@ -8,6 +8,7 @@
 #include <alina/opengl-graphics-pipeline.hpp>
 #include <alina/opengl-inputlayout.hpp>
 #include <alina/opengl-shader.hpp>
+#include <alina/opengl-texture.hpp>
 #include <vector>
 
 namespace alina::opengl {
@@ -36,6 +37,9 @@ namespace alina::opengl {
     }
     ::alina::GraphicsPipeline* Device::createGraphicsPipeline(const GraphicsPipelineDesc& desc) {
         return new GraphicsPipeline(desc, this);
+    }
+    ::alina::Texture* Device::createTexture(const TextureDesc& desc) {
+        return new Texture(desc, this);
     }
 
     void Device::execute(const Commands::BindGraphicsPipeline& command) {

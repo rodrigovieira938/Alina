@@ -150,6 +150,49 @@ namespace alina {
         UniformBufferBinding& setSet(uint32_t value) {set = value; return *this;}
         UniformBufferBinding& setBinding(uint32_t value) {binding = value; return *this;}
     };
+    enum class TextureFormat {
+        #define FORMAT(type, bits) \
+            R    ## bits ## _ ## type, \
+            RG   ## bits ## _ ## type, \
+            RGB  ## bits ## _ ## type, \
+            RGBA ## bits ## _ ## type 
+
+        FORMAT(Sint, 8),
+        FORMAT(Sint, 16),
+        FORMAT(Sint, 32),
+        FORMAT(Uint, 8),
+        FORMAT(Uint, 16),
+        FORMAT(Uint, 32),
+        FORMAT(Snorm, 8),
+        FORMAT(Snorm, 16),
+        FORMAT(Unorm, 8),
+        FORMAT(Unorm, 16),
+        FORMAT(Float, 16),
+        FORMAT(Float, 32),
+        
+        SRGB8,
+        SRGBA8
+
+        #undef FORMAT
+    };
+    //TODO: add clearColor, add samplerDesc and sampler object
+    struct TextureDesc {
+        TextureFormat format = TextureFormat::RGB8_Unorm;
+        uint32_t width = 1, height = 1;
+        uint32_t depth = 1;
+        // 0 -> none
+        uint32_t mipLevels = 0;
+
+        TextureDesc& setFormat(TextureFormat value) {format = value; return *this;}
+        TextureDesc& setWidth(uint32_t value) {width = value; return *this;}
+        TextureDesc& setHeight(uint32_t value) {height = value; return *this;}
+        TextureDesc& setDepth(uint32_t value) {width = value; return *this;}
+        TextureDesc& setMipLevels(uint32_t value) {mipLevels = value; return *this;}
+    };
+    class Texture {
+    public:
+        virtual TextureFormat getFormat() = 0;
+    };
     struct ShaderResources {
         std::vector<UniformBufferBinding> uboBinding;
 
@@ -179,6 +222,7 @@ namespace alina {
         //Raw Shader data, for opengl -> glsl text, for vulkan -> spirv
         virtual Shader* createShader(ShaderType type, const void* data, size_t size) = 0;
         virtual GraphicsPipeline* createGraphicsPipeline(const GraphicsPipelineDesc& desc) = 0;
+        virtual Texture* createTexture(const TextureDesc& desc) = 0;
         virtual void execute(CommandList* cmd) = 0;
     };
 }
