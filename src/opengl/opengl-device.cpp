@@ -102,6 +102,21 @@ namespace alina::opengl {
         }
     }
 
+    void Device::execute(const Commands::BlitTextures& command) {
+        auto src = ((Texture*)command.src);
+        auto dest = ((Texture*)command.dest);
+        
+        context.CopyImageSubData(src->id, src->desc.depth == 1 ? GL_TEXTURE_2D : GL_TEXTURE_3D, 0, 0, 0, 0, dest->id, dest->desc.depth == 1 ? GL_TEXTURE_2D : GL_TEXTURE_3D, 0, 0, 0, 0, src->desc.width, src->desc.height, src->desc.depth);
+    }
+    void Device::execute(const Commands::GenerateMipMaps& command) {
+        context.GenerateTextureMipmap(((Texture*)command.tex)->id);
+    }
+    //TODO: add support for conversion from unsupported formats
+    void Device::execute(const Commands::WriteTexture& command) {
+        auto tex = ((Texture*)command.tex);
+        context.TextureSubImage2D(tex->id, 0, 0, 0, tex->desc.width, tex->desc.height, textureFormatsToGl(tex->desc.format), GL_TEXTURE_2D, command.data);
+    }
+
     void Device::execute(::alina::CommandList* cmd) {
         for (auto& command : ((CommandList*)cmd)->commands) {
             std::visit([this](auto&& arg){

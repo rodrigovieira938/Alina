@@ -61,6 +61,27 @@ namespace alina::opengl {
             }
         );
     }
+    void CommandList::blitTexture(::alina::Texture* src, ::alina::Texture* dest){
+        commands.emplace_back(
+            Commands::BlitTextures {
+                src, dest
+            }
+        );
+    }
+    void CommandList::generateMipMaps(::alina::Texture* tex){
+        commands.emplace_back(
+            Commands::GenerateMipMaps {
+                tex
+            }
+        );
+    }
+    void CommandList::writeTexture(::alina::Texture* tex, const void* data, TextureFormat dataFormat){
+        commands.emplace_back(
+            Commands::WriteTexture {
+                tex,data,dataFormat
+            }
+        );
+    }
     void CommandList::end() {
         doneRecording = true;
     }

@@ -27,7 +27,7 @@ int main(void)
     auto device = alina::opengl::CreateDevice(glfwGetProcAddress);
     
     auto texture = device->createTexture(alina::TextureDesc().setWidth(8).setHeight(8));
-
+    
     auto cmd = device->createCommandList();
     cmd->begin();
     cmd->end();

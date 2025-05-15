@@ -25,6 +25,9 @@ namespace alina::opengl {
         void execute(const Commands::DrawIndexed& command);
         void execute(const Commands::WriteBuffer& command);
         void execute(const Commands::ClearBuffer& command);
+        void execute(const Commands::BlitTextures& command);
+        void execute(const Commands::GenerateMipMaps& command);
+        void execute(const Commands::WriteTexture& command);
         void execute(::alina::CommandList* cmd) override;
 
         GraphicsPipeline* currentPipeline;

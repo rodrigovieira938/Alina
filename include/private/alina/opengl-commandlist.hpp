@@ -33,6 +33,17 @@ namespace alina::opengl {
         struct BindShaderResources {
             const ShaderResources& shaderResources;
         };
+        struct BlitTextures {
+            Texture *src, *dest;
+        };
+        struct GenerateMipMaps {
+            Texture* tex;
+        };
+        struct WriteTexture {
+            Texture* tex;
+            const void* data;
+            TextureFormat dataFormat;
+        };
     };
     class CommandList : public ::alina::CommandList {
     public:
@@ -44,7 +55,10 @@ namespace alina::opengl {
             Commands::BindGraphicsPipeline,
             Commands::BindVertexBuffers,
             Commands::BindIndexBuffer,
-            Commands::BindShaderResources
+            Commands::BindShaderResources,
+            Commands::BlitTextures,
+            Commands::GenerateMipMaps,
+            Commands::WriteTexture
         >;
         void begin() override;
         void bindGraphicsPipeline(alina::GraphicsPipeline* pipeline) override;
@@ -55,6 +69,9 @@ namespace alina::opengl {
         void drawIndexed(const DrawArguments& drawArgs) override;
         void writeBuffer(Buffer* buffer, const void* data, size_t size, size_t offset) override;
         void clearBuffer(Buffer* buffer, uint32_t clearValue) override;
+        void blitTexture(::alina::Texture* src, ::alina::Texture* dest) override;
+        void generateMipMaps(::alina::Texture* tex) override;
+        void writeTexture(::alina::Texture* tex, const void* data, TextureFormat dataFormat) override;
         void end() override;
         std::vector<Command> commands = {};
         bool doneRecording = false;

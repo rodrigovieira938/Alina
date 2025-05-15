@@ -209,6 +209,11 @@ namespace alina {
         virtual void drawIndexed(const DrawArguments& drawArgs) = 0;
         virtual void writeBuffer(Buffer* buffer, const void* data, size_t size, size_t offset) = 0;
         virtual void clearBuffer(Buffer* buffer, uint32_t clearValue) = 0;
+        //TODO: add offsets and portions of the texture
+        virtual void blitTexture(Texture* src, Texture* dest) = 0;
+        virtual void generateMipMaps(Texture* tex) = 0;
+        //TODO: add offsets and portions of the texture
+        virtual void writeTexture(Texture* tex, const void* data, TextureFormat dataFormat) = 0;
         virtual void end() = 0;
     };
     class Device {
