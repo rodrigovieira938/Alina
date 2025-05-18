@@ -9,6 +9,7 @@
 #include <alina/opengl-inputlayout.hpp>
 #include <alina/opengl-shader.hpp>
 #include <alina/opengl-texture.hpp>
+#include <alina/opengl-sampler.hpp>
 #include <vector>
 
 namespace alina::opengl {
@@ -41,7 +42,9 @@ namespace alina::opengl {
     ::alina::Texture* Device::createTexture(const TextureDesc& desc) {
         return new Texture(desc, this);
     }
-
+    ::alina::Sampler* Device::createSampler(const SamplerDesc& desc) {
+        return new Sampler(desc, this);
+    }
     void Device::execute(const Commands::BindGraphicsPipeline& command) {
         currentPipeline = (GraphicsPipeline*)command.pipeline;
         currentPipeline->bind();

@@ -224,6 +224,9 @@ namespace alina {
         TextureDesc& setMipLevels(uint32_t value) {mipLevels = value; return *this;}
         TextureDesc& setSampler(const SamplerDesc& value) {sampler = value; return *this;}
     };
+    class Sampler {
+
+    };
     class Texture {
     public:
         virtual TextureFormat getFormat() = 0;
@@ -263,6 +266,7 @@ namespace alina {
         virtual Shader* createShader(ShaderType type, const void* data, size_t size) = 0;
         virtual GraphicsPipeline* createGraphicsPipeline(const GraphicsPipelineDesc& desc) = 0;
         virtual Texture* createTexture(const TextureDesc& desc) = 0;
+        virtual Sampler* createSampler(const SamplerDesc& desc) = 0;
         virtual void execute(CommandList* cmd) = 0;
     };
 }

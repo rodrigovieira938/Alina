@@ -17,6 +17,7 @@ namespace alina::opengl {
         Shader* createShader(ShaderType type, const void* data, size_t size) override;
         ::alina::GraphicsPipeline* createGraphicsPipeline(const GraphicsPipelineDesc& desc) override;
         Texture* createTexture(const TextureDesc& desc) override;
+        Sampler* createSampler(const SamplerDesc& desc) override;
         void execute(const Commands::BindGraphicsPipeline& command);
         void execute(const Commands::BindShaderResources& command);
         void execute(const Commands::BindVertexBuffers& command);
