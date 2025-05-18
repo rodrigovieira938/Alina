@@ -55,6 +55,17 @@ namespace alina::opengl {
             //TODO: deal with bindings
             context.BindBufferBase(GL_UNIFORM_BUFFER, ubo.binding, buffer->mID);
         }
+        for(auto& bindTex : command.shaderResources.texBinding) {
+            auto buffer = ((Texture*)bindTex.texture);
+            //TODO: deal with bindings & multiple textures
+            context.ActiveTexture(GL_TEXTURE0);
+            context.BindTexture(GL_TEXTURE_2D, buffer->id);
+            if(bindTex.sampler) {
+                auto sampler = ((Sampler*)bindTex.sampler);
+                context.BindSampler(0, sampler->id);
+            }
+            context.Uniform1i(bindTex.binding, 0);
+        }
     }
 
     void Device::execute(const Commands::BindVertexBuffers& command) {

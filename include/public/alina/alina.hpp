@@ -90,7 +90,7 @@ namespace alina {
         VertexAttributeDesc& setName(std::string value) {name = value; return *this;}
         VertexAttributeDesc& setBufferIndex(uint32_t value) {bufferIndex = value; return *this;}
         VertexAttributeDesc& setArraySize(uint32_t value) {arraySize = value; return *this;}
-        VertexAttributeDesc& setOffset(uint32_t value) {bufferIndex = value; return *this;}
+        VertexAttributeDesc& setOffset(uint32_t value) {offset = value; return *this;}
         VertexAttributeDesc& setStride(uint32_t value) {stride = value; return *this;}
         VertexAttributeDesc& setFormat(VertexAttributeFormat value) {format = value; return *this;}
         VertexAttributeDesc& setInstanced(bool value) {isInstanced = value; return *this;}
@@ -141,14 +141,6 @@ namespace alina {
         BindVertexBuffer& setBuffer(Buffer*  value) {buffer = value; return *this;}
         BindVertexBuffer& setOffset(uint32_t value) {offset = value; return *this;}
         BindVertexBuffer& setStride(uint32_t value) {stride = value; return *this;}
-    };
-    struct UniformBufferBinding {
-        Buffer* buffer = nullptr;
-        uint32_t set = 0, binding = 0;
-        
-        UniformBufferBinding& setBuffer(Buffer* value) {buffer = value; return *this;}
-        UniformBufferBinding& setSet(uint32_t value) {set = value; return *this;}
-        UniformBufferBinding& setBinding(uint32_t value) {binding = value; return *this;}
     };
     enum class TextureFormat {
         #define FORMAT(type, bits) \
@@ -207,6 +199,7 @@ namespace alina {
         SamplerDesc& setUWrap(TextureWrap value) {u = value; return *this;}
         SamplerDesc& setVWrap(TextureWrap value) {v = value; return *this;}
         SamplerDesc& setWWrap(TextureWrap value) {w = value; return *this;}
+        SamplerDesc& setAllWrap(TextureWrap value) {u = v = w = value; return *this;}
     };
     //TODO: add clearColor and sampler object
     struct TextureDesc {
@@ -231,10 +224,30 @@ namespace alina {
     public:
         virtual TextureFormat getFormat() = 0;
     };
+    struct UniformBufferBinding {
+        Buffer* buffer = nullptr;
+        uint32_t set = 0, binding = 0;
+        
+        UniformBufferBinding& setBuffer(Buffer* value) {buffer = value; return *this;}
+        UniformBufferBinding& setSet(uint32_t value) {set = value; return *this;}
+        UniformBufferBinding& setBinding(uint32_t value) {binding = value; return *this;}
+    };
+    struct TextureBinding {
+        Sampler* sampler = nullptr;
+        Texture* texture = nullptr;
+        uint32_t set = 0, binding = 0;
+
+        TextureBinding& setTexture(Texture* value) {texture = value; return *this;}
+        TextureBinding& setSampler(Sampler* value) {sampler = value; return *this;}
+        TextureBinding& setSet(uint32_t value) {set = value; return *this;}
+        TextureBinding& setBinding(uint32_t value) {binding = value; return *this;}
+    };
     struct ShaderResources {
         std::vector<UniformBufferBinding> uboBinding;
+        std::vector<TextureBinding> texBinding;
 
         ShaderResources& setUboBindings(const std::vector<UniformBufferBinding> value) {uboBinding = value; return *this;}
+        ShaderResources& setTexBindings(const std::vector<TextureBinding> value)       {texBinding = value; return *this;}
     };
     class CommandList {
     public:
