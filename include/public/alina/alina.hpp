@@ -271,6 +271,29 @@ namespace alina {
         ShaderResources& setUboBindings(const std::vector<UniformBufferBinding> value) {uboBinding = value; return *this;}
         ShaderResources& setTexBindings(const std::vector<TextureBinding> value)       {texBinding = value; return *this;}
     };
+    enum class RenderPassLoadOp {
+        LOAD, CLEAR
+    };
+    struct RenderPassDesc {
+        Framebuffer* fb = nullptr;
+        std::array<RenderPassLoadOp, 8> loadOps;
+        std::array<std::array<float, 4>, 8> clearColors;
+        RenderPassDesc& setFramebuffer(Framebuffer* value) {fb = value; return *this;}
+        RenderPassDesc& setAttachmentsLoadOp(const std::array<RenderPassLoadOp, 8>& value) {loadOps = value; return *this;}
+        RenderPassDesc& setAttachmentsClearColors(const std::array<std::array<float, 4>, 8>& value) {clearColors = value; return *this;}
+    
+    };
+    enum class SubPassAttachment {
+        NONE,
+        PRESERVE,
+        INPUT,
+        COLOR,
+    };
+    struct SubPassDesc {
+        std::array<SubPassAttachment, 8> attachments;
+
+        SubPassDesc& setAttachments(const std::array<SubPassAttachment, 8>& value) {attachments = value; return *this;}
+    };
     class CommandList {
     public:
         virtual void begin() = 0;
@@ -287,6 +310,9 @@ namespace alina {
         virtual void generateMipMaps(Texture* tex) = 0;
         //TODO: add offsets and portions of the texture
         virtual void writeTexture(Texture* tex, const void* data, TextureFormat dataFormat) = 0;
+        virtual void beginRenderPass(const RenderPassDesc& desc) = 0;
+        virtual void beginSubPass(const SubPassDesc& desc) = 0;
+        virtual void endRenderPass() = 0;
         virtual void end() = 0;
     };
     class Device {

@@ -134,7 +134,23 @@ namespace alina::opengl {
         auto tex = ((Texture*)command.tex);
         context.TextureSubImage2D(tex->id, 0, 0, 0, tex->desc.width, tex->desc.height, textureFormatsToGlChannels(command.dataFormat), textureFormatsToGlType(command.dataFormat), command.data);
     }
+    void Device::execute(const Commands::BeginRenderPass& command) {
+        //TODO: validate renderpass
+        auto fb = (Framebuffer*)command.desc.fb;
+        context.BindFramebuffer(GL_FRAMEBUFFER, fb->id);
+        for(int i = 0; fb->desc.colorAttachments[i].texture != nullptr; i++) {
+            if(command.desc.loadOps[i] == RenderPassLoadOp::CLEAR) {
+                context.ClearBufferfv(GL_COLOR, i, command.desc.clearColors[i].data());
+            }
+        }
+    }
+    void Device::execute(const Commands::BeginSubPass& command) {
+        //TODO: validate subpass
+    }
 
+    void Device::execute(const Commands::EndRenderPass& command) {
+        context.BindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
     void Device::execute(::alina::CommandList* cmd) {
         for (auto& command : ((CommandList*)cmd)->commands) {
             std::visit([this](auto&& arg){

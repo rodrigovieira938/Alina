@@ -30,7 +30,11 @@ namespace alina::opengl {
         void execute(const Commands::BlitTextures& command);
         void execute(const Commands::GenerateMipMaps& command);
         void execute(const Commands::WriteTexture& command);
+        void execute(const Commands::BeginRenderPass& command);
+        void execute(const Commands::BeginSubPass& command);
+        void execute(const Commands::EndRenderPass& command);
         void execute(::alina::CommandList* cmd) override;
+
 
         GraphicsPipeline* currentPipeline;
         GladGLContext context;

@@ -44,6 +44,13 @@ namespace alina::opengl {
             const void* data;
             TextureFormat dataFormat;
         };
+        struct BeginRenderPass {
+            RenderPassDesc desc;
+        };
+        struct BeginSubPass {
+            SubPassDesc desc;
+        };
+        struct EndRenderPass {};
     };
     class CommandList : public ::alina::CommandList {
     public:
@@ -58,7 +65,10 @@ namespace alina::opengl {
             Commands::BindShaderResources,
             Commands::BlitTextures,
             Commands::GenerateMipMaps,
-            Commands::WriteTexture
+            Commands::WriteTexture,
+            Commands::BeginRenderPass,
+            Commands::BeginSubPass,
+            Commands::EndRenderPass
         >;
         void begin() override;
         void bindGraphicsPipeline(alina::GraphicsPipeline* pipeline) override;
@@ -72,6 +82,9 @@ namespace alina::opengl {
         void blitTexture(::alina::Texture* src, ::alina::Texture* dest) override;
         void generateMipMaps(::alina::Texture* tex) override;
         void writeTexture(::alina::Texture* tex, const void* data, TextureFormat dataFormat) override;
+        void beginRenderPass(const RenderPassDesc& desc) override;
+        void beginSubPass(const SubPassDesc& desc) override;
+        void endRenderPass() override;
         void end() override;
         std::vector<Command> commands = {};
         bool doneRecording = false;

@@ -15,5 +15,6 @@ namespace alina::opengl {
         if(desc.depthAttachment.texture != nullptr) {
             context.NamedFramebufferTexture(id, index, ((Texture*)desc.depthAttachment.texture)->id, 0);
         }
+        this->desc = desc;
     }
 }

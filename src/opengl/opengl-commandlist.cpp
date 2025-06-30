@@ -82,6 +82,21 @@ namespace alina::opengl {
             }
         );
     }
+    void CommandList::beginRenderPass(const RenderPassDesc& desc) {
+        commands.emplace_back(
+            Commands::BeginRenderPass {desc}
+        );
+    }
+    void CommandList::beginSubPass(const SubPassDesc& desc) {
+        commands.emplace_back(
+            Commands::BeginSubPass {desc}
+        );
+    }
+    void CommandList::endRenderPass() {
+        commands.emplace_back(
+            Commands::EndRenderPass {}
+        );
+    }
     void CommandList::end() {
         doneRecording = true;
     }

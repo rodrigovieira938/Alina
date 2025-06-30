@@ -7,6 +7,6 @@ namespace alina::opengl {
         Framebuffer(const FramebufferDesc& desc, ::alina::Device* device);
 
         uint32_t id;
-        TextureDesc desc;
+        FramebufferDesc desc;
     };
 }
