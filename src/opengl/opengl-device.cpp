@@ -10,6 +10,7 @@
 #include <alina/opengl-shader.hpp>
 #include <alina/opengl-texture.hpp>
 #include <alina/opengl-sampler.hpp>
+#include <alina/opengl-framebuffer.hpp>
 #include <vector>
 
 namespace alina::opengl {
@@ -44,6 +45,9 @@ namespace alina::opengl {
     }
     ::alina::Sampler* Device::createSampler(const SamplerDesc& desc) {
         return new Sampler(desc, this);
+    }
+    ::alina::Framebuffer* Device::createFramebuffer(const FramebufferDesc& desc) {
+        return new Framebuffer(desc, this);
     }
     void Device::execute(const Commands::BindGraphicsPipeline& command) {
         currentPipeline = (GraphicsPipeline*)command.pipeline;

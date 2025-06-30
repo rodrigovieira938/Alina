@@ -1,4 +1,5 @@
 #pragma once
+#include <array>
 #include <string>
 #include <stdint.h>
 #include <vector>
@@ -201,7 +202,11 @@ namespace alina {
         SamplerDesc& setWWrap(TextureWrap value) {w = value; return *this;}
         SamplerDesc& setAllWrap(TextureWrap value) {u = v = w = value; return *this;}
     };
-    //TODO: add clearColor and sampler object
+    enum class TextureUsage {
+        TEXTURE,
+        ATTACHMENT,
+    };
+    //TODO: add clearColor
     struct TextureDesc {
         TextureFormat format = TextureFormat::RGB8_Unorm;
         uint32_t width = 1, height = 1;
@@ -209,6 +214,7 @@ namespace alina {
         // 0 -> none
         uint32_t mipLevels = 0;
         SamplerDesc sampler;
+        TextureUsage usage = TextureUsage::TEXTURE;
 
         TextureDesc& setFormat(TextureFormat value) {format = value; return *this;}
         TextureDesc& setWidth(uint32_t value) {width = value; return *this;}
@@ -216,6 +222,7 @@ namespace alina {
         TextureDesc& setDepth(uint32_t value) {width = value; return *this;}
         TextureDesc& setMipLevels(uint32_t value) {mipLevels = value; return *this;}
         TextureDesc& setSampler(const SamplerDesc& value) {sampler = value; return *this;}
+        TextureDesc& setUsage(TextureUsage value) {usage = value; return *this;}
     };
     class Sampler {
 
@@ -223,6 +230,21 @@ namespace alina {
     class Texture {
     public:
         virtual TextureFormat getFormat() = 0;
+    };
+    struct FramebufferAttachment {
+        Texture* texture;
+        FramebufferAttachment& setTexture(Texture* value) {texture = value; return *this;}
+    };
+    //TODO: add acess to only a specific layer
+    struct FramebufferDesc {
+        std::array<FramebufferAttachment, 8> colorAttachments;
+        FramebufferAttachment depthAttachment;
+
+        FramebufferDesc& setColorAttachments(const std::array<FramebufferAttachment, 8>& value) {colorAttachments = value; return *this;}
+        FramebufferDesc& setDepthAttachment(FramebufferAttachment value) {depthAttachment = value; return *this;}
+    };
+    class Framebuffer {
+
     };
     struct UniformBufferBinding {
         Buffer* buffer = nullptr;
@@ -280,6 +302,9 @@ namespace alina {
         virtual GraphicsPipeline* createGraphicsPipeline(const GraphicsPipelineDesc& desc) = 0;
         virtual Texture* createTexture(const TextureDesc& desc) = 0;
         virtual Sampler* createSampler(const SamplerDesc& desc) = 0;
+        virtual Framebuffer* createFramebuffer(const FramebufferDesc& desc) = 0;
         virtual void execute(CommandList* cmd) = 0;
     };
 }
+
+#undef DEFINE_ENUM_CLASS_BITWISE_OPERATORS
