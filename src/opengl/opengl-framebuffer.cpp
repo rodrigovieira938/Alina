@@ -3,7 +3,7 @@
 #include <alina/opengl-device.hpp>
 #include <alina/opengl-texture.hpp>
 namespace alina::opengl {
-    Framebuffer::Framebuffer(const FramebufferDesc& desc, ::alina::Device* device) {
+    Framebuffer::Framebuffer(const FramebufferDesc& desc, IDevice* device) {
         auto context = ((Device*)device)->context;
         context.CreateFramebuffers(1, &id);
         uint32_t index = GL_COLOR_ATTACHMENT0;

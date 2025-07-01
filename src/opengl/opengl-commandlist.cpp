@@ -12,7 +12,7 @@ namespace alina::opengl {
             }
         );
     }
-    void CommandList::bindGraphicsPipeline(alina::GraphicsPipeline* pipeline) {
+    void CommandList::bindGraphicsPipeline(alina::IGraphicsPipeline* pipeline) {
         commands.emplace_back(
             Commands::BindGraphicsPipeline {
                 pipeline
@@ -33,7 +33,7 @@ namespace alina::opengl {
             }
         );
     }
-    void CommandList::bindIndexBuffer(Buffer* buffer) {
+    void CommandList::bindIndexBuffer(IBuffer* buffer) {
         commands.emplace_back(
             Commands::BindIndexBuffer {
                 buffer
@@ -47,35 +47,35 @@ namespace alina::opengl {
             }
         );
     }
-    void CommandList::writeBuffer(Buffer* buffer, const void* data, size_t size, size_t offset) {
+    void CommandList::writeBuffer(IBuffer* buffer, const void* data, size_t size, size_t offset) {
         commands.emplace_back(
             Commands::WriteBuffer {
                 buffer, data, size, offset
             }
         );
     }
-    void CommandList::clearBuffer(Buffer* buffer, uint32_t clearValue) {
+    void CommandList::clearBuffer(IBuffer* buffer, uint32_t clearValue) {
         commands.emplace_back(
             Commands::ClearBuffer {
                 buffer,clearValue
             }
         );
     }
-    void CommandList::blitTexture(::alina::Texture* src, ::alina::Texture* dest){
+    void CommandList::blitTexture(ITexture* src, ITexture* dest){
         commands.emplace_back(
             Commands::BlitTextures {
                 src, dest
             }
         );
     }
-    void CommandList::generateMipMaps(::alina::Texture* tex){
+    void CommandList::generateMipMaps(ITexture* tex){
         commands.emplace_back(
             Commands::GenerateMipMaps {
                 tex
             }
         );
     }
-    void CommandList::writeTexture(::alina::Texture* tex, const void* data, TextureFormat dataFormat){
+    void CommandList::writeTexture(ITexture* tex, const void* data, TextureFormat dataFormat){
         commands.emplace_back(
             Commands::WriteTexture {
                 tex,data,dataFormat

@@ -25,28 +25,28 @@ namespace alina::opengl {
     void Device::endFrame() {
         
     }
-    ::alina::Buffer* Device::createBuffer(const BufferDesc& desc) {
+    IBuffer* Device::createBuffer(const BufferDesc& desc) {
         return new Buffer(desc, this);
     }
-    ::alina::CommandList* Device::createCommandList() {
+    ICommandList* Device::createCommandList() {
         return new CommandList();
     }
-    ::alina::Shader* Device::createShader(ShaderType type, const void* data, size_t size) {
+    IShader* Device::createShader(ShaderType type, const void* data, size_t size) {
         return Shader::createShader(this, type, data, size);
     }
-    ::alina::InputLayout* Device::createInputLayout(const VertexAttributeDesc* attrs, size_t size) {
+    IInputLayout* Device::createInputLayout(const VertexAttributeDesc* attrs, size_t size) {
         return new InputLayout(attrs, size);
     }
-    ::alina::GraphicsPipeline* Device::createGraphicsPipeline(const GraphicsPipelineDesc& desc) {
+    IGraphicsPipeline* Device::createGraphicsPipeline(const GraphicsPipelineDesc& desc) {
         return new GraphicsPipeline(desc, this);
     }
-    ::alina::Texture* Device::createTexture(const TextureDesc& desc) {
+    ITexture* Device::createTexture(const TextureDesc& desc) {
         return new Texture(desc, this);
     }
-    ::alina::Sampler* Device::createSampler(const SamplerDesc& desc) {
+    ISampler* Device::createSampler(const SamplerDesc& desc) {
         return new Sampler(desc, this);
     }
-    ::alina::Framebuffer* Device::createFramebuffer(const FramebufferDesc& desc) {
+    IFramebuffer* Device::createFramebuffer(const FramebufferDesc& desc) {
         return new Framebuffer(desc, this);
     }
     void Device::execute(const Commands::BindGraphicsPipeline& command) {
@@ -151,7 +151,7 @@ namespace alina::opengl {
     void Device::execute(const Commands::EndRenderPass& command) {
         context.BindFramebuffer(GL_FRAMEBUFFER, 0);
     }
-    void Device::execute(::alina::CommandList* cmd) {
+    void Device::execute(ICommandList* cmd) {
         for (auto& command : ((CommandList*)cmd)->commands) {
             std::visit([this](auto&& arg){
                 this->execute(arg);

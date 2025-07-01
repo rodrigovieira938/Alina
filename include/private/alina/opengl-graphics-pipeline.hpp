@@ -3,7 +3,7 @@
 
 namespace alina::opengl {
     class Device;
-    class GraphicsPipeline : public ::alina::GraphicsPipeline {
+    class GraphicsPipeline : public IGraphicsPipeline {
     public:
         GraphicsPipeline(GraphicsPipelineDesc desc, Device* device);
         void bind();

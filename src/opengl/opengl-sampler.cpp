@@ -3,7 +3,7 @@
 #include <alina/opengl-conversions.hpp>
 
 namespace alina::opengl {
-    Sampler::Sampler(const SamplerDesc& desc, ::alina::Device* device) {
+    Sampler::Sampler(const SamplerDesc& desc, IDevice* device) {
         auto context = ((Device*)device)->context;
         context.CreateSamplers(1, &id);
         if(desc.magFilter) {

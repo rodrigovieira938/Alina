@@ -3,7 +3,7 @@
 
 namespace alina::opengl {
     class Device;
-    class Shader : public ::alina::Shader {
+    class Shader : public IShader {
     public:
         static Shader* createShader(Device* device, ShaderType type, const void* data, size_t size);
         ShaderType getType() override;

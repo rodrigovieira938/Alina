@@ -5,20 +5,20 @@
 #include <glad/gl.h>
 
 namespace alina::opengl {
-    class Device : public ::alina::Device {
+    class Device : public IDevice {
     public:
         Device(glLoadFunction fn);
         bool beginFrame() override;
         void endFrame() override;
-        Buffer* createBuffer(const BufferDesc& desc) override;
-        ::alina::CommandList* createCommandList() override;
-        ::alina::InputLayout* createInputLayout(const VertexAttributeDesc* attrs, size_t size) override;
-        inline ::alina::InputLayout* createInputLayout(const std::vector<VertexAttributeDesc>& attrs) {return createInputLayout(attrs.data(), attrs.size());}
-        Shader* createShader(ShaderType type, const void* data, size_t size) override;
-        ::alina::GraphicsPipeline* createGraphicsPipeline(const GraphicsPipelineDesc& desc) override;
-        Texture* createTexture(const TextureDesc& desc) override;
-        Sampler* createSampler(const SamplerDesc& desc) override;
-        Framebuffer* createFramebuffer(const FramebufferDesc& desc) override;
+        IBuffer* createBuffer(const BufferDesc& desc) override;
+        ICommandList* createCommandList() override;
+        IInputLayout* createInputLayout(const VertexAttributeDesc* attrs, size_t size) override;
+        inline IInputLayout* createInputLayout(const std::vector<VertexAttributeDesc>& attrs) {return createInputLayout(attrs.data(), attrs.size());}
+        IShader* createShader(ShaderType type, const void* data, size_t size) override;
+        IGraphicsPipeline* createGraphicsPipeline(const GraphicsPipelineDesc& desc) override;
+        ITexture* createTexture(const TextureDesc& desc) override;
+        ISampler* createSampler(const SamplerDesc& desc) override;
+        IFramebuffer* createFramebuffer(const FramebufferDesc& desc) override;
         void execute(const Commands::BindGraphicsPipeline& command);
         void execute(const Commands::BindShaderResources& command);
         void execute(const Commands::BindVertexBuffers& command);
@@ -33,7 +33,7 @@ namespace alina::opengl {
         void execute(const Commands::BeginRenderPass& command);
         void execute(const Commands::BeginSubPass& command);
         void execute(const Commands::EndRenderPass& command);
-        void execute(::alina::CommandList* cmd) override;
+        void execute(ICommandList* cmd) override;
 
 
         GraphicsPipeline* currentPipeline;

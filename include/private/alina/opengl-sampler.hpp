@@ -2,9 +2,9 @@
 
 #include <alina/alina.hpp>
 namespace alina::opengl {
-    class Sampler : public ::alina::Sampler {
+    class Sampler : public ISampler {
     public:
-        Sampler(const SamplerDesc& desc, ::alina::Device* device);
+        Sampler(const SamplerDesc& desc, IDevice* device);
 
         uint32_t id;
     };

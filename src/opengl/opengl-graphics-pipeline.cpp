@@ -4,7 +4,7 @@
 #include <alina/opengl-device.hpp>
 #include <alina/opengl-shader.hpp>
 namespace alina::opengl {
-    static InputLayout* defaultInputLayout = nullptr;
+    static IInputLayout* defaultInputLayout = nullptr;
     GraphicsPipeline::GraphicsPipeline(GraphicsPipelineDesc desc, Device* device) {
         if(!defaultInputLayout)
             defaultInputLayout = device->createInputLayout(

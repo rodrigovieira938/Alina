@@ -2,7 +2,7 @@
 #include "alina/alina.hpp"
 
 namespace alina::opengl {
-    class InputLayout : public ::alina::InputLayout {
+    class InputLayout : public IInputLayout {
     public:
         InputLayout(const VertexAttributeDesc* attrs, size_t size);
         VertexAttributeDesc* getAttributes();

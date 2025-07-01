@@ -2,9 +2,9 @@
 #include "alina/alina.hpp"
 
 namespace alina::opengl {
-    class Framebuffer : public ::alina::Framebuffer {
+    class Framebuffer : public IFramebuffer {
     public:
-        Framebuffer(const FramebufferDesc& desc, ::alina::Device* device);
+        Framebuffer(const FramebufferDesc& desc, IDevice* device);
 
         uint32_t id;
         FramebufferDesc desc;

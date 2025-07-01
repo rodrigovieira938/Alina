@@ -6,7 +6,7 @@
 #include <math.h>
 
 namespace alina::opengl {
-    Texture::Texture(const TextureDesc& _desc, ::alina::Device* device) : desc(_desc) {
+    Texture::Texture(const TextureDesc& _desc, IDevice* device) : desc(_desc) {
         auto context = ((Device*)device)->context;
         if(desc.mipLevels == 0)
             desc.sampler.mipFilter = false;

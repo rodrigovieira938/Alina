@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 namespace alina::opengl {
-    class Buffer : public ::alina::Buffer {
+    class Buffer : public IBuffer {
     public:
         Buffer(const BufferDesc& desc, Device* device);
         BufferType getType() const override {return mType;}
