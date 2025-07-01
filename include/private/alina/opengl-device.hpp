@@ -9,7 +9,7 @@ namespace alina::opengl {
     public:
         Device(glLoadFunction fn);
         GladGLContext getContext() override {return context;}
-        ITexture* createUnmangedTexture(uint32_t id) override;
+        ITexture* createUnmanagedTexture(uint32_t id) override;
 
         bool beginFrame() override;
         void endFrame() override;

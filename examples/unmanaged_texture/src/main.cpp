@@ -36,7 +36,7 @@ int main(void)
 
     /*Creates the device */
     auto device = (alina::opengl::IGlDevice*)alina::opengl::CreateDevice(glfwGetProcAddress);
-    auto texture = device->createUnmangedTexture(createTexture(device));
+    auto texture = device->createUnmanagedTexture(createTexture(device));
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
