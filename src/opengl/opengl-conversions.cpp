@@ -94,7 +94,9 @@ namespace alina::opengl {
                 return GL_SRGB8;
             case TextureFormat::SRGBA8:
                 return GL_SRGB_ALPHA;
-        }
+            case TextureFormat::Unknown:
+              break;
+            }
         return -1;
     }
     //TODO: handle unsupported formats
@@ -122,7 +124,9 @@ namespace alina::opengl {
                 return GL_RGB;
             case TextureFormat::SRGBA8:
                 return GL_RGBA;
-        }
+            case TextureFormat::Unknown:
+              break;
+            }
         return -1;
     }
     //TODO: handle unsupported formats
@@ -147,10 +151,12 @@ namespace alina::opengl {
             FORMAT(Float, 32, GL_FLOAT)
             #undef FORMAT
             case TextureFormat::SRGB8:
-                return GL_RGB;
+                return GL_SRGB;
             case TextureFormat::SRGBA8:
-                return GL_RGBA;
-        }
+                return GL_SRGB;
+            case TextureFormat::Unknown:
+              break;
+            }
         return -1;
     }
     GLenum textureFilterToGl(const TextureFilter& filter, bool mips) {
@@ -180,5 +186,30 @@ namespace alina::opengl {
             return GL_CLAMP_TO_BORDER;
         }
         return -1;
+    }
+    alina::TextureFormat glTextureFormatToAlina(GLenum format) {
+        switch(format) {
+            #define FORMAT(type, bits, apitype) \
+            case GL_R ## bits ## apitype: return TextureFormat::R    ## bits ## _ ## type; \
+            case GL_RG ## bits ## apitype: return TextureFormat::RG    ## bits ## _ ## type; \
+            case GL_RGB ## bits ## apitype: return TextureFormat::RGB    ## bits ## _ ## type; \
+            case GL_RGBA ## bits ## apitype: return TextureFormat::RGBA    ## bits ## _ ## type;
+
+            FORMAT(Sint, 8, I)
+            FORMAT(Sint, 16, I)
+            FORMAT(Sint, 32, I)
+            FORMAT(Uint, 8, UI)
+            FORMAT(Uint, 16, UI)
+            FORMAT(Uint, 32, UI)
+            FORMAT(Float, 32, F)
+            #undef FORMAT
+            case GL_SRGB8:
+                return TextureFormat::SRGB8;
+            case GL_SRGB_ALPHA:
+                return TextureFormat::SRGBA8;
+            default:
+              break;
+        }
+        return alina::TextureFormat::Unknown;
     }
 }

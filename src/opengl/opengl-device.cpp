@@ -18,6 +18,9 @@ namespace alina::opengl {
         gladLoadGLContext(&context, fn);
         context.Enable(GL_CULL_FACE);
     }
+    ITexture* Device::createUnmangedTexture(uint32_t id) {
+        return new Texture(id, this);
+    }
     bool Device::beginFrame() {
         context.Clear(GL_COLOR_BUFFER_BIT);
         return true;

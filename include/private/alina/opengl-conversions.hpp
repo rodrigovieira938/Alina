@@ -12,4 +12,6 @@ namespace alina::opengl {
     GLenum textureFormatsToGlType(const TextureFormat& format);
     GLenum textureFilterToGl(const TextureFilter& filter, bool mips);
     GLenum textureWrapToGl(const TextureWrap& wrap);
+
+    alina::TextureFormat glTextureFormatToAlina(GLenum format);
 }

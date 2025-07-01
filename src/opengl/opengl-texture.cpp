@@ -31,5 +31,20 @@ namespace alina::opengl {
         if(desc.sampler.u == TextureWrap::ClampToBorder || desc.sampler.v == TextureWrap::ClampToBorder || desc.sampler.w == TextureWrap::ClampToBorder)
             context.TextureParameterfv(id, GL_TEXTURE_BORDER_COLOR, &desc.sampler.border.r);
     }
+    Texture::Texture(uint32_t id, IDevice* device) {
+        auto context = ((Device*)device)->context;
+        GLint internalFormat = 0, width = 0, height = 0, depth = 0, mipLevels = 0;
+        context.GetTextureLevelParameteriv(id, 0, GL_TEXTURE_INTERNAL_FORMAT, &internalFormat);
+        context.GetTextureLevelParameteriv(id, 0, GL_TEXTURE_WIDTH, &width);
+        context.GetTextureLevelParameteriv(id, 0, GL_TEXTURE_HEIGHT, &height);
+        context.GetTextureLevelParameteriv(id, 0, GL_TEXTURE_DEPTH, &depth);
+        //TODO: find another way to get the mipmapLevels
+        context.GetTextureParameteriv(id, GL_TEXTURE_MAX_LEVEL, &mipLevels);
+
+        desc.format = glTextureFormatToAlina(internalFormat);
+        desc.width = width;
+        desc.height = height;
+        desc.mipLevels = mipLevels + 1;
+    }
     TextureFormat Texture::getFormat() {return desc.format;}
 }
