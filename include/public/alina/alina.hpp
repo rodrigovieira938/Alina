@@ -332,5 +332,3 @@ namespace alina {
         virtual void execute(ICommandList* cmd) = 0;
     };
 }
-
-#undef DEFINE_ENUM_CLASS_BITWISE_OPERATORS
