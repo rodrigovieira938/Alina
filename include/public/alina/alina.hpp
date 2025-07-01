@@ -149,7 +149,7 @@ namespace alina {
             RG   ## bits ## _ ## type, \
             RGB  ## bits ## _ ## type, \
             RGBA ## bits ## _ ## type 
-
+        Unknown,
         FORMAT(Sint, 8),
         FORMAT(Sint, 16),
         FORMAT(Sint, 32),
