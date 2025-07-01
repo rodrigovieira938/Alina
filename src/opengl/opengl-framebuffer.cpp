@@ -1,3 +1,4 @@
+#include "alina/alina.hpp"
 #include "glad/gl.h"
 #include <alina/opengl-framebuffer.hpp>
 #include <alina/opengl-device.hpp>
@@ -16,5 +17,28 @@ namespace alina::opengl {
             context.NamedFramebufferTexture(id, index, ((Texture*)desc.depthAttachment.texture)->id, 0);
         }
         this->desc = desc;
+    }
+    Framebuffer::Framebuffer(uint32_t id, IDevice* device) {
+        auto glDevice = (Device*)device;
+        auto context = glDevice->context;
+        this->id = id;
+        if(id == 0) {
+            //TODO: deal with default framebuffer
+            return;
+        }
+        
+        GLint type;
+        uint32_t i = 0;
+        while (true) {
+            context.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+i, GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE, &type);
+            desc.colorAttachments[i] = FramebufferAttachment().setTexture(glDevice->createUnmanagedTexture(i));
+            i++;
+            if(type == GL_RENDERBUFFER) //Cannot be used as a texture
+                continue;
+
+            if(type != GL_TEXTURE)
+                break;
+        }
+        //TODO: add support for depth and stencil when texture supports it 
     }
 }

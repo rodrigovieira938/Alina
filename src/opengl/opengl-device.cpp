@@ -21,6 +21,9 @@ namespace alina::opengl {
     ITexture* Device::createUnmanagedTexture(uint32_t id) {
         return new Texture(id, this);
     }
+    IFramebuffer* Device::createUnmanagedFramebuffer(uint32_t id) {
+        return new Framebuffer(id, this);
+    }
     bool Device::beginFrame() {
         context.Clear(GL_COLOR_BUFFER_BIT);
         return true;

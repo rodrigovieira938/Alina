@@ -10,5 +10,6 @@ namespace alina::opengl {
     struct IGlDevice : public IDevice {
         virtual GladGLContext getContext() = 0;
         virtual ITexture* createUnmanagedTexture(uint32_t id) = 0;
+        virtual IFramebuffer* createUnmanagedFramebuffer(uint32_t id) = 0;
     };
 } 

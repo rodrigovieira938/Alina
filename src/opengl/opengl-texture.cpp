@@ -45,6 +45,7 @@ namespace alina::opengl {
         desc.width = width;
         desc.height = height;
         desc.mipLevels = mipLevels + 1;
+        this->id = id;
     }
     TextureFormat Texture::getFormat() {return desc.format;}
 }

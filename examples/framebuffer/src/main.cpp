@@ -202,7 +202,6 @@ int main(void)
     auto tex = device->createTexture(alina::TextureDesc().setWidth(640).setHeight(480).setUsage(alina::TextureUsage::ATTACHMENT));
     auto fb = device->createFramebuffer(alina::FramebufferDesc().setColorAttachments({alina::FramebufferAttachment().setTexture(tex)}));
     auto cmd = device->createCommandList();
-
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
