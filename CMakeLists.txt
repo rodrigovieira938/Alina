@@ -32,7 +32,7 @@ glad_add_library(glad STATIC REPRODUCIBLE MX LOADER API gl:core=4.4)
 
 file(GLOB_RECURSE alina_src "src/*.cpp" "src/*.hpp")
 add_library(alina ${alina_src})
-target_link_libraries(alina PRIVATE glad)
+target_link_libraries(alina PUBLIC glad)
 target_include_directories(alina PUBLIC include/public)
 target_include_directories(alina PRIVATE include/private)
 

@@ -5,9 +5,11 @@
 #include <glad/gl.h>
 
 namespace alina::opengl {
-    class Device : public IDevice {
+    class Device : public IGlDevice {
     public:
         Device(glLoadFunction fn);
+        GladGLContext getContext() override {return context;}
+
         bool beginFrame() override;
         void endFrame() override;
         IBuffer* createBuffer(const BufferDesc& desc) override;
