@@ -25,7 +25,6 @@ namespace alina::opengl {
         return new Framebuffer(id, this);
     }
     bool Device::beginFrame() {
-        context.Clear(GL_COLOR_BUFFER_BIT);
         return true;
     }
     void Device::endFrame() {
