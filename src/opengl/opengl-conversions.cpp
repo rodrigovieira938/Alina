@@ -140,7 +140,7 @@ namespace alina::opengl {
             FORMAT(Sint, 8, GL_BYTE)
             FORMAT(Sint, 16, GL_SHORT)
             FORMAT(Sint, 32, GL_INT)
-            FORMAT(Uint, 8, GL_UNSIGNED_INT)
+            FORMAT(Uint, 8, GL_UNSIGNED_BYTE)
             FORMAT(Uint, 16, GL_UNSIGNED_SHORT)
             FORMAT(Uint, 32, GL_UNSIGNED_INT)
             FORMAT(Snorm, 8, GL_BYTE)
