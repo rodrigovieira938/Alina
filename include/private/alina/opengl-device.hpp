@@ -40,6 +40,7 @@ namespace alina::opengl {
         void execute(ICommandList* cmd) override;
 
 
+        RenderPassDesc currentRenderPass;
         GraphicsPipeline* currentPipeline;
         GladGLContext context;
     };

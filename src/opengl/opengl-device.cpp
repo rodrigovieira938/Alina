@@ -1,4 +1,5 @@
 #include "alina/alina.hpp"
+#include <array>
 #include <cmath>
 #include <glad/gl.h>
 #include <alina/opengl-device.hpp>
@@ -148,9 +149,24 @@ namespace alina::opengl {
                 context.ClearBufferfv(GL_COLOR, i, command.desc.clearColors[i].data());
             }
         }
+        currentRenderPass = command.desc;
     }
     void Device::execute(const Commands::BeginSubPass& command) {
         //TODO: validate subpass
+        std::array<GLenum, 8> drawBuffers;
+        int count = 0;
+        int it = 0;
+
+        for(int i = 0; ((Framebuffer*)currentRenderPass.fb)->desc.colorAttachments[i].texture != nullptr;i++) {
+            if(command.desc.attachments[i] == SubPassAttachment::COLOR) {
+                drawBuffers[it] = GL_COLOR_ATTACHMENT0 + i;
+                it++;
+                count++;
+            }
+
+        }
+
+        context.DrawBuffers(count, drawBuffers.data());
     }
 
     void Device::execute(const Commands::EndRenderPass& command) {
