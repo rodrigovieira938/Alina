@@ -215,6 +215,7 @@ namespace alina {
         uint32_t mipLevels = 0;
         SamplerDesc sampler;
         TextureUsage usage = TextureUsage::TEXTURE;
+        std::string name; 
 
         TextureDesc& setFormat(TextureFormat value) {format = value; return *this;}
         TextureDesc& setWidth(uint32_t value) {width = value; return *this;}
@@ -223,6 +224,10 @@ namespace alina {
         TextureDesc& setMipLevels(uint32_t value) {mipLevels = value; return *this;}
         TextureDesc& setSampler(const SamplerDesc& value) {sampler = value; return *this;}
         TextureDesc& setUsage(TextureUsage value) {usage = value; return *this;}
+        TextureDesc& setDebugName(std::string name) {
+            this->name = name;
+            return *this;
+        };
     };
     class ISampler {
 
@@ -239,9 +244,14 @@ namespace alina {
     struct FramebufferDesc {
         std::array<FramebufferAttachment, 8> colorAttachments;
         FramebufferAttachment depthAttachment;
+        std::string name;
 
         FramebufferDesc& setColorAttachments(const std::array<FramebufferAttachment, 8>& value) {colorAttachments = value; return *this;}
         FramebufferDesc& setDepthAttachment(FramebufferAttachment value) {depthAttachment = value; return *this;}
+        FramebufferDesc& setDebugName(std::string name) {
+            this->name = name;
+            return *this;
+        };
     };
     class IFramebuffer {
 

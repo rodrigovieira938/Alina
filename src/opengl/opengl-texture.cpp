@@ -30,6 +30,7 @@ namespace alina::opengl {
     
         if(desc.sampler.u == TextureWrap::ClampToBorder || desc.sampler.v == TextureWrap::ClampToBorder || desc.sampler.w == TextureWrap::ClampToBorder)
             context.TextureParameterfv(id, GL_TEXTURE_BORDER_COLOR, &desc.sampler.border.r);
+        context.ObjectLabel(GL_TEXTURE, id, desc.name.size(), desc.name.data());
     }
     Texture::Texture(uint32_t id, IDevice* device) {
         auto context = ((Device*)device)->context;

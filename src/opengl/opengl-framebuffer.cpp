@@ -17,6 +17,7 @@ namespace alina::opengl {
             context.NamedFramebufferTexture(id, index, ((Texture*)desc.depthAttachment.texture)->id, 0);
         }
         this->desc = desc;
+        context.ObjectLabel(GL_FRAMEBUFFER, id, desc.name.size(), desc.name.data());
     }
     Framebuffer::Framebuffer(uint32_t id, IDevice* device) {
         auto glDevice = (Device*)device;
