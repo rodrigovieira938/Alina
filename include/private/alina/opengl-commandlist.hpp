@@ -31,7 +31,7 @@ namespace alina::opengl {
             IBuffer* buffer;
         };
         struct BindShaderResources {
-            const ShaderResources& shaderResources;
+            ShaderResources shaderResources;
         };
         struct BlitTextures {
             ITexture *src, *dest;
