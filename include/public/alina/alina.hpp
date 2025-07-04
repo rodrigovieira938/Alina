@@ -108,6 +108,7 @@ namespace alina {
         FRAGMENT
     };
     class IShader {
+    public:
         virtual ShaderType getType() = 0;
     };
     //Simple graphics pipeline desc, must be expanded
@@ -220,7 +221,7 @@ namespace alina {
         TextureDesc& setFormat(TextureFormat value) {format = value; return *this;}
         TextureDesc& setWidth(uint32_t value) {width = value; return *this;}
         TextureDesc& setHeight(uint32_t value) {height = value; return *this;}
-        TextureDesc& setDepth(uint32_t value) {width = value; return *this;}
+        TextureDesc& setDepth(uint32_t value) {depth = value; return *this;}
         TextureDesc& setMipLevels(uint32_t value) {mipLevels = value; return *this;}
         TextureDesc& setSampler(const SamplerDesc& value) {sampler = value; return *this;}
         TextureDesc& setUsage(TextureUsage value) {usage = value; return *this;}
