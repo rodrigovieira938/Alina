@@ -25,6 +25,12 @@ FetchContent_Declare(
   GIT_SHALLOW TRUE
   GIT_PROGRESS TRUE
 )
+FetchContent_Declare(
+  stb
+  GIT_REPOSITORY https://github.com/nothings/stb
+  GIT_SHALLOW TRUE
+  GIT_PROGRESS TRUE
+)
 
 FetchContent_MakeAvailable(glad)
 
@@ -37,6 +43,8 @@ target_include_directories(alina PUBLIC include/public)
 target_include_directories(alina PRIVATE include/private)
 
 if(${ALINA_BUILD_EXAMPLES})
-  FetchContent_MakeAvailable(glfw glm)
+  FetchContent_MakeAvailable(glfw glm stb)
   add_subdirectory(examples)
+  add_library(stb INTERFACE)
+  target_include_directories(stb INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/_deps/stb-src)
 endif()
