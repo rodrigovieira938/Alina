@@ -114,7 +114,7 @@ int main(void)
         #version 440 core
         layout (location = 0) out vec4 fragColor;
         
-        layout(binding = 1) uniform sampler2D tex;
+        layout(binding = 0) uniform sampler2D tex;
         in vec2 uv;
         void main()
         {
@@ -149,7 +149,7 @@ int main(void)
             layout (location = 0) out vec4 fragColor;
             layout (location = 1) out vec4 brightColor;
 
-            layout(binding = 1) uniform sampler2D tex;
+            layout(binding = 0) uniform sampler2D tex;
             in vec2 uv;
             void main()
             {
@@ -194,7 +194,7 @@ int main(void)
             layout (location = 0) out vec4 fragColor;
             layout (location = 1) out vec4 brightColor;
 
-            uniform sampler2D image;
+            layout(binding = 0) uniform sampler2D image;
             in vec2 uv;
 
             layout (std140, binding = 1) uniform ubo

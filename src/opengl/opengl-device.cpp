@@ -75,7 +75,7 @@ namespace alina::opengl {
                 auto sampler = ((Sampler*)bindTex.sampler);
                 context.BindSampler(i, sampler->id);
             }
-            context.Uniform1i(bindTex.binding, i++);
+//            context.Uniform1i(bindTex.binding, i++);
         }
     }
 
