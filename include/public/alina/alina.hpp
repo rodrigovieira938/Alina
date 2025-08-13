@@ -305,32 +305,41 @@ namespace alina {
 
     class IBuffer {
     public:
+        virtual ~IBuffer() = default;
         virtual BufferType getType() const = 0; 
     };
 
     class IInputLayout {
     public:
+        virtual ~IInputLayout() = default;
         virtual VertexAttributeDesc* getAttributes() = 0;
         virtual size_t getNumAttributes() = 0;
     };
     class IShader {
     public:
+        virtual ~IShader() = default;
         virtual ShaderType getType() = 0;
     };
     class IGraphicsPipeline {
+    public:
+        virtual ~IGraphicsPipeline() = default;
     };
     class ISampler {
-
+    public:
+        virtual ~ISampler() = default;
     };
     class ITexture {
     public:
+        virtual ~ITexture() = default;
         virtual TextureFormat getFormat() = 0;
     };
     class IFramebuffer {
-
+    public:
+        virtual ~IFramebuffer() = default;
     };
     class ICommandList {
     public:
+        virtual ~ICommandList() = default;
         virtual void begin() = 0;
         virtual void bindGraphicsPipeline(IGraphicsPipeline* pipeline) = 0;
         virtual void bindShaderResources(const ShaderResources& shaderResouces) = 0;
@@ -352,6 +361,7 @@ namespace alina {
     };
     class IDevice {
     public:
+        virtual ~IDevice() = default;
         virtual bool beginFrame() = 0;
         virtual void endFrame() = 0;
         virtual IBuffer* createBuffer(const BufferDesc& desc) = 0;
