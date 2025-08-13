@@ -8,7 +8,7 @@
 #include <stb_image.h>
 #include <glm/glm.hpp>
 
-alina::ITexture* loadTexture(alina::IDevice* device, alina::ICommandList* cmd) {;
+alina::Texture loadTexture(alina::Device device, alina::CommandList cmd) {;
     constexpr const char* filepath = "./examples/bloom/texture.png";
     if(!std::filesystem::exists(filepath)) {
         std::cerr << "Should be run with the project root as the current working directory!\n";
@@ -136,7 +136,7 @@ int main(void)
             .setVertexShader(vs)
             .setFragmentShader(fs)
     );
-    alina::IGraphicsPipeline* extractBrightnessPipeline;
+    alina::GraphicsPipeline extractBrightnessPipeline;
     auto brightnessAlbedoTex = device->createTexture(alina::TextureDesc().setWidth(640).setHeight(480).setFormat(alina::TextureFormat::RGB32_Float).setUsage(alina::TextureUsage::ATTACHMENT).setDebugName("Brightness Pass Albedo"));
     auto brightnessTex = device->createTexture(alina::TextureDesc().setWidth(640).setHeight(480).setFormat(alina::TextureFormat::RGB32_Float).setUsage(alina::TextureUsage::ATTACHMENT).setDebugName("Brightness Pass Brightness"));
     auto brightnessfb = device->createFramebuffer(alina::FramebufferDesc().setColorAttachments({
@@ -175,16 +175,16 @@ int main(void)
                 .setFragmentShader(device->createShader(alina::ShaderType::FRAGMENT, fragment_source, std::strlen(fragment_source)))
         );
     }
-    alina::IGraphicsPipeline* blurPipeline;
-    alina::IBuffer* blurUbo = device->createBuffer(
+    alina::GraphicsPipeline blurPipeline;
+    alina::Buffer blurUbo = device->createBuffer(
         alina::BufferDesc()
             .setDebugName("UniformBuffer")
             .setType(alina::BufferType::UNIFORM));
-    alina::ITexture* blurTextures[] = {
+    alina::Texture blurTextures[] = {
         device->createTexture(alina::TextureDesc().setWidth(640).setHeight(480).setFormat(alina::TextureFormat::RGB32_Float).setUsage(alina::TextureUsage::ATTACHMENT).setDebugName("Blur Pass Texture1")),
         device->createTexture(alina::TextureDesc().setWidth(640).setHeight(480).setFormat(alina::TextureFormat::RGB32_Float).setUsage(alina::TextureUsage::ATTACHMENT).setDebugName("Blur Pass Texture2")),
     };
-    alina::IFramebuffer* blurFbs[] = {
+    alina::Framebuffer blurFbs[] = {
         device->createFramebuffer(alina::FramebufferDesc().setColorAttachments({blurTextures[0]}).setDebugName("BlurPass Framebuffer 1")),
         device->createFramebuffer(alina::FramebufferDesc().setColorAttachments({blurTextures[1]}).setDebugName("BlurPass Framebuffer 2")),
     };
@@ -239,7 +239,7 @@ int main(void)
                 .setFragmentShader(device->createShader(alina::ShaderType::FRAGMENT, fragment_source, std::strlen(fragment_source)))
         );
     };
-    alina::IGraphicsPipeline* blendingPipeline;
+    alina::GraphicsPipeline blendingPipeline;
     {
         const char* fragment_source = R"(
             #version 440 core
@@ -279,7 +279,7 @@ int main(void)
 
     int blurPasses = 2;
 
-    alina::ITexture* blurFinalTex;
+    alina::Texture blurFinalTex;
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))

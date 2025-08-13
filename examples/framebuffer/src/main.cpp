@@ -4,8 +4,8 @@
 #include <glm/glm.hpp>
 #include <cstring>
 
-void renderToFb(alina::IDevice* device, alina::IFramebuffer* fb, alina::ICommandList* cmd) {
-    static alina::IBuffer *vertex_buffer = nullptr, *index_buffer = nullptr;
+void renderToFb(alina::Device device, alina::Framebuffer fb, alina::CommandList cmd) {
+    static alina::Buffer vertex_buffer = nullptr, index_buffer = nullptr;
     if(!vertex_buffer) {
         static float vertices[] = {
             0.0f,  0.5f, 0.0f,
@@ -33,7 +33,7 @@ void renderToFb(alina::IDevice* device, alina::IFramebuffer* fb, alina::ICommand
         device->execute(cmd);
     }
     
-    static alina::IShader *vs = nullptr, *fs = nullptr;
+    static alina::Shader vs = nullptr, fs = nullptr;
     if(vs == nullptr) {
         static const char* vertex_source = R"(
             #version 440 core
@@ -58,7 +58,7 @@ void renderToFb(alina::IDevice* device, alina::IFramebuffer* fb, alina::ICommand
         vs = device->createShader(alina::ShaderType::VERTEX, vertex_source, std::strlen(vertex_source));
         fs = device->createShader(alina::ShaderType::FRAGMENT, fragment_source, std::strlen(fragment_source));
     }
-    static alina::IGraphicsPipeline* pipeline = nullptr;
+    static alina::GraphicsPipeline pipeline = nullptr;
     if(!pipeline) {
         pipeline = device->createGraphicsPipeline(
             alina::GraphicsPipelineDesc()
@@ -89,10 +89,10 @@ void renderToFb(alina::IDevice* device, alina::IFramebuffer* fb, alina::ICommand
     cmd->end();
     device->execute(cmd);
 }
-void renderFb(alina::IDevice* device, alina::ITexture* tex, alina::ICommandList* cmd) {
-    static alina::IGraphicsPipeline* pipeline = nullptr;
-    static alina::IShader *vs = nullptr, *fs = nullptr;
-    static alina::IBuffer *vertex_buffer = nullptr, *index_buffer = nullptr;
+void renderFb(alina::Device device, alina::Texture tex, alina::CommandList cmd) {
+    static alina::GraphicsPipeline pipeline = nullptr;
+    static alina::Shader vs = nullptr, fs = nullptr;
+    static alina::Buffer vertex_buffer = nullptr, index_buffer = nullptr;
     struct Vertex {
         glm::vec3 pos;
         glm::vec2 uv;

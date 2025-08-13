@@ -15,92 +15,92 @@
 #include <vector>
 
 namespace alina::opengl {
-    Device::Device(glLoadFunction fn) {
+    GlDevice::GlDevice(glLoadFunction fn) {
         gladLoadGLContext(&context, fn);
         context.Enable(GL_CULL_FACE);
     }
-    ITexture* Device::createUnmanagedTexture(uint32_t id) {
-        return new Texture(id, this);
+    Texture GlDevice::createUnmanagedTexture(uint32_t id) {
+        return std::make_shared<GlTexture>(id, this);
     }
-    IFramebuffer* Device::createUnmanagedFramebuffer(uint32_t id) {
-        return new Framebuffer(id, this);
+    Framebuffer GlDevice::createUnmanagedFramebuffer(uint32_t id) {
+        return std::make_shared<GlFramebuffer>(id, this);
     }
-    bool Device::beginFrame() {
+    bool GlDevice::beginFrame() {
         return true;
     }
-    void Device::endFrame() {
+    void GlDevice::endFrame() {
         
     }
-    IBuffer* Device::createBuffer(const BufferDesc& desc) {
-        return new Buffer(desc, this);
+    Buffer GlDevice::createBuffer(const BufferDesc& desc) {
+        return std::make_shared<GlBuffer>(desc, this);
     }
-    ICommandList* Device::createCommandList() {
-        return new CommandList();
+    CommandList GlDevice::createCommandList() {
+        return std::make_shared<GlCommandList>();
     }
-    IShader* Device::createShader(ShaderType type, const void* data, size_t size) {
-        return Shader::createShader(this, type, data, size);
+    Shader GlDevice::createShader(ShaderType type, const void* data, size_t size) {
+        return GlShader::createShader(this, type, data, size);
     }
-    IInputLayout* Device::createInputLayout(const VertexAttributeDesc* attrs, size_t size) {
-        return new InputLayout(attrs, size);
+    InputLayout GlDevice::createInputLayout(const VertexAttributeDesc* attrs, size_t size) {
+        return std::make_shared<GlInputLayout>(attrs, size);
     }
-    IGraphicsPipeline* Device::createGraphicsPipeline(const GraphicsPipelineDesc& desc) {
-        return new GraphicsPipeline(desc, this);
+    GraphicsPipeline GlDevice::createGraphicsPipeline(const GraphicsPipelineDesc& desc) {
+        return std::make_shared<GlGraphicsPipeline>(desc, this);
     }
-    ITexture* Device::createTexture(const TextureDesc& desc) {
-        return new Texture(desc, this);
+    Texture GlDevice::createTexture(const TextureDesc& desc) {
+        return std::make_shared<GlTexture>(desc, this);
     }
-    ISampler* Device::createSampler(const SamplerDesc& desc) {
-        return new Sampler(desc, this);
+    Sampler GlDevice::createSampler(const SamplerDesc& desc) {
+        return std::make_shared<GlSampler>(desc, this);
     }
-    IFramebuffer* Device::createFramebuffer(const FramebufferDesc& desc) {
-        return new Framebuffer(desc, this);
+    Framebuffer GlDevice::createFramebuffer(const FramebufferDesc& desc) {
+        return std::make_shared<GlFramebuffer>(desc, this);
     }
-    void Device::execute(const Commands::BindGraphicsPipeline& command) {
-        currentPipeline = (GraphicsPipeline*)command.pipeline;
+    void GlDevice::execute(const Commands::BindGraphicsPipeline& command) {
+        currentPipeline = (GlGraphicsPipeline*)command.pipeline.get();
         currentPipeline->bind();
     }
-    void Device::execute(const Commands::BindShaderResources& command) {
+    void GlDevice::execute(const Commands::BindShaderResources& command) {
         for(auto& ubo : command.shaderResources.uboBinding) {
-            auto buffer = ((Buffer*)ubo.buffer);
+            auto buffer = ((GlBuffer*)ubo.buffer.get());
             //TODO: deal with bindings
             context.BindBufferBase(GL_UNIFORM_BUFFER, ubo.binding, buffer->mID);
         }
         int i = 0;
         for(auto& bindTex : command.shaderResources.texBinding) {
-            auto buffer = ((Texture*)bindTex.texture);
+            auto buffer = ((GlTexture*)bindTex.texture.get());
             //TODO: deal with bindings
             context.ActiveTexture(GL_TEXTURE0+i);
             context.BindTexture(GL_TEXTURE_2D, buffer->id);
             if(bindTex.sampler) {
-                auto sampler = ((Sampler*)bindTex.sampler);
+                auto sampler = ((GlSampler*)bindTex.sampler.get());
                 context.BindSampler(i, sampler->id);
             }
 //            context.Uniform1i(bindTex.binding, i++);
         }
     }
 
-    void Device::execute(const Commands::BindVertexBuffers& command) {
+    void GlDevice::execute(const Commands::BindVertexBuffers& command) {
         for(int i = 0; i < command.buffers.size(); i++) {
             alina::BindVertexBuffer bindBuffer = command.buffers[i]; 
-            Buffer* buffer = (Buffer*)bindBuffer.buffer;
+            GlBuffer* buffer = (GlBuffer*)bindBuffer.buffer.get();
             //context.BindVertexBuffer(i, buffer->mID, bindBuffer.offset, bindBuffer.offset);
             context.VertexArrayVertexBuffer(currentPipeline->vertexArray, i, buffer->mID, bindBuffer.offset, bindBuffer.stride);
         }
     }
-    void Device::execute(const Commands::BindIndexBuffer& command) {
-        Buffer* buffer = (Buffer*)command.buffer;
+    void GlDevice::execute(const Commands::BindIndexBuffer& command) {
+        GlBuffer* buffer = (GlBuffer*)command.buffer.get();
         context.BindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->mID);
     }
-    void Device::execute(const Commands::Draw& command) {
+    void GlDevice::execute(const Commands::Draw& command) {
         //TODO: change primitive
         context.DrawArraysInstanced(GL_TRIANGLES, command.args.offset, command.args.vertexCount, command.args.instanceCount);
     }
-    void Device::execute(const Commands::DrawIndexed& command) {
+    void GlDevice::execute(const Commands::DrawIndexed& command) {
         //TODO: change primitive
         context.DrawElementsInstancedBaseVertex(GL_TRIANGLES, command.args.vertexCount, GL_UNSIGNED_INT, nullptr, command.args.instanceCount, command.args.offset);
     }
-    void Device::execute(const Commands::WriteBuffer& command) {
-        Buffer* buffer = (Buffer*)command.buffer;
+    void GlDevice::execute(const Commands::WriteBuffer& command) {
+        GlBuffer* buffer = (GlBuffer*)command.buffer.get();
         GLenum bufferType = bufferTypeToGl(buffer->mType); 
         context.BindBuffer(bufferType, buffer->mID);
         if(command.size > buffer->size)
@@ -110,8 +110,8 @@ namespace alina::opengl {
         buffer->size = command.size;
         context.BindBuffer(bufferType, 0);
     }
-    void Device::execute(const Commands::ClearBuffer& command) {
-        Buffer* buffer = (Buffer*)command.buffer;
+    void GlDevice::execute(const Commands::ClearBuffer& command) {
+        GlBuffer* buffer = (GlBuffer*)command.buffer.get();
         std::vector<uint32_t> data;
         //Simple round up
         size_t size = (buffer->size % sizeof(uint32_t) == 0) ? buffer->size / sizeof(uint32_t) : buffer->size / sizeof(uint32_t) + sizeof(uint32_t);
@@ -127,23 +127,23 @@ namespace alina::opengl {
         }
     }
 
-    void Device::execute(const Commands::BlitTextures& command) {
-        auto src = ((Texture*)command.src);
-        auto dest = ((Texture*)command.dest);
+    void GlDevice::execute(const Commands::BlitTextures& command) {
+        auto src = ((GlTexture*)command.src.get());
+        auto dest = ((GlTexture*)command.dest.get());
         
         context.CopyImageSubData(src->id, src->desc.depth == 1 ? GL_TEXTURE_2D : GL_TEXTURE_3D, 0, 0, 0, 0, dest->id, dest->desc.depth == 1 ? GL_TEXTURE_2D : GL_TEXTURE_3D, 0, 0, 0, 0, src->desc.width, src->desc.height, src->desc.depth);
     }
-    void Device::execute(const Commands::GenerateMipMaps& command) {
-        context.GenerateTextureMipmap(((Texture*)command.tex)->id);
+    void GlDevice::execute(const Commands::GenerateMipMaps& command) {
+        context.GenerateTextureMipmap(((GlTexture*)command.tex.get())->id);
     }
     //TODO: add support for conversion from unsupported formats
-    void Device::execute(const Commands::WriteTexture& command) {
-        auto tex = ((Texture*)command.tex);
+    void GlDevice::execute(const Commands::WriteTexture& command) {
+        auto tex = ((GlTexture*)command.tex.get());
         context.TextureSubImage2D(tex->id, 0, 0, 0, tex->desc.width, tex->desc.height, textureFormatsToGlChannels(command.dataFormat), textureFormatsToGlType(command.dataFormat), command.data);
     }
-    void Device::execute(const Commands::BeginRenderPass& command) {
+    void GlDevice::execute(const Commands::BeginRenderPass& command) {
         //TODO: validate renderpass
-        auto fb = (Framebuffer*)command.desc.fb;
+        auto fb = (GlFramebuffer*)command.desc.fb.get();
         context.BindFramebuffer(GL_FRAMEBUFFER, fb->id);
         for(int i = 0; fb->desc.colorAttachments[i].texture != nullptr; i++) {
             if(command.desc.loadOps[i] == RenderPassLoadOp::CLEAR) {
@@ -152,13 +152,13 @@ namespace alina::opengl {
         }
         currentRenderPass = command.desc;
     }
-    void Device::execute(const Commands::BeginSubPass& command) {
+    void GlDevice::execute(const Commands::BeginSubPass& command) {
         //TODO: validate subpass
         std::array<GLenum, 8> drawBuffers;
         int count = 0;
         int it = 0;
 
-        for(int i = 0; ((Framebuffer*)currentRenderPass.fb)->desc.colorAttachments[i].texture != nullptr;i++) {
+        for(int i = 0; ((GlFramebuffer*)currentRenderPass.fb.get())->desc.colorAttachments[i].texture.get() != nullptr;i++) {
             if(command.desc.attachments[i] == SubPassAttachment::COLOR) {
                 drawBuffers[it] = GL_COLOR_ATTACHMENT0 + i;
                 it++;
@@ -170,11 +170,11 @@ namespace alina::opengl {
         context.DrawBuffers(count, drawBuffers.data());
     }
 
-    void Device::execute(const Commands::EndRenderPass& command) {
+    void GlDevice::execute(const Commands::EndRenderPass& command) {
         context.BindFramebuffer(GL_FRAMEBUFFER, 0);
     }
-    void Device::execute(ICommandList* cmd) {
-        for (auto& command : ((CommandList*)cmd)->commands) {
+    void GlDevice::execute(CommandList cmd) {
+        for (auto& command : ((GlCommandList*)cmd.get())->commands) {
             std::visit([this](auto&& arg){
                 this->execute(arg);
             }, command);

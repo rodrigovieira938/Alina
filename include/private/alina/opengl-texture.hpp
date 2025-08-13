@@ -1,10 +1,11 @@
 #pragma once
+#include "alina/opengl-device.hpp"
 #include <alina/alina.hpp>
 namespace alina::opengl {
-    class Texture : public ITexture {
+    class GlTexture : public ITexture {
     public:
-        Texture(const TextureDesc& desc, IDevice* device);
-        Texture(uint32_t id, IDevice* device);
+        GlTexture(const TextureDesc& desc, GlDevice* device);
+        GlTexture(uint32_t id, GlDevice* device);
         TextureFormat getFormat() override;
 
         uint32_t id;

@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <alina/alina.hpp>
 #include <cstring>
+#include <memory>
 
 uint32_t createTexture(alina::opengl::IGlDevice* device) {
     auto context = device->getContext();
@@ -42,8 +43,8 @@ int main(void)
     glfwMakeContextCurrent(window);
 
     /*Creates the device */
-    auto device = (alina::opengl::IGlDevice*)alina::opengl::CreateDevice(glfwGetProcAddress);
-    auto fb = device->createUnmanagedFramebuffer(createFramebuffer(device, createTexture(device)));
+    auto device = std::dynamic_pointer_cast<alina::opengl::IGlDevice>(alina::opengl::CreateDevice(glfwGetProcAddress));
+    auto fb = device->createUnmanagedFramebuffer(createFramebuffer(device.get(), createTexture(device.get())));
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))

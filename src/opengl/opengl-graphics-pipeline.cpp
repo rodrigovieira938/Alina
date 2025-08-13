@@ -3,9 +3,10 @@
 #include <alina/opengl-conversions.hpp>
 #include <alina/opengl-device.hpp>
 #include <alina/opengl-shader.hpp>
+#include <memory>
 namespace alina::opengl {
-    static IInputLayout* defaultInputLayout = nullptr;
-    GraphicsPipeline::GraphicsPipeline(GraphicsPipelineDesc desc, Device* device) {
+    static InputLayout defaultInputLayout = nullptr;
+    GlGraphicsPipeline::GlGraphicsPipeline(GraphicsPipelineDesc desc, GlDevice* device) {
         if(!defaultInputLayout)
             defaultInputLayout = device->createInputLayout(
                 {
@@ -31,13 +32,13 @@ namespace alina::opengl {
         if(desc.vs != nullptr || desc.fs != nullptr) {
             this->program = device->context.CreateProgram();
             if(desc.vs)
-                device->context.AttachShader(program, static_cast<Shader*>(desc.vs)->id);
+                device->context.AttachShader(program, ((GlShader*)desc.vs.get())->id);
             if(desc.fs)
-                device->context.AttachShader(program, static_cast<Shader*>(desc.fs)->id);
+                device->context.AttachShader(program, ((GlShader*)desc.fs.get())->id);
             device->context.LinkProgram(program);
         }
     }
-    void GraphicsPipeline::bind() {
+    void GlGraphicsPipeline::bind() {
         device->context.CullFace(rasterCullModeToGl(desc.renderState.rasterState.cullMode));
         device->context.PolygonMode(GL_FRONT_AND_BACK, rasterFillModeToGl(desc.renderState.rasterState.fillMode));
         device->context.FrontFace(desc.renderState.rasterState.frontCounterClockwise ? GL_CW : GL_CCW);

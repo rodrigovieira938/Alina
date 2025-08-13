@@ -2,7 +2,7 @@
 #include <alina/opengl-device.hpp>
 
 namespace alina::opengl {
-    IDevice* CreateDevice(glLoadFunction fn) {
-        return new opengl::Device(fn);
+    Device CreateDevice(glLoadFunction fn) {
+        return std::make_shared<GlDevice>(fn);
     }
 }

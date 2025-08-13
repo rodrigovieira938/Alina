@@ -35,8 +35,8 @@ int main(void)
     glfwMakeContextCurrent(window);
 
     /*Creates the device */
-    auto device = (alina::opengl::IGlDevice*)alina::opengl::CreateDevice(glfwGetProcAddress);
-    auto texture = device->createUnmanagedTexture(createTexture(device));
+    auto device = std::dynamic_pointer_cast<alina::opengl::IGlDevice>(alina::opengl::CreateDevice(glfwGetProcAddress));
+    auto texture = device->createUnmanagedTexture(createTexture(device.get()));
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))

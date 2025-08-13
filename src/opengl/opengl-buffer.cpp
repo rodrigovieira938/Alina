@@ -2,8 +2,8 @@
 #include <alina/opengl-conversions.hpp>
 
 namespace alina::opengl {
-    Buffer::Buffer(const BufferDesc& desc, Device* device) {
-        mDevice = static_cast<Device*>(device);
+    GlBuffer::GlBuffer(const BufferDesc& desc, GlDevice* device) {
+        mDevice = static_cast<GlDevice*>(device);
         mType = desc.type;
         auto e = bufferTypeToGl(desc.type);
         mDevice->context.CreateBuffers(1, &mID);

@@ -1,5 +1,6 @@
 #pragma once
 #include <array>
+#include <memory>
 #include <string>
 #include <stdint.h>
 #include <vector>
@@ -10,12 +11,23 @@ namespace alina {
     // ===================
     class IBuffer;
     class IInputLayout;
+    class IGraphicsPipeline;
     class IShader;
     class ISampler;
     class ITexture;
     class IFramebuffer;
     class ICommandList;
     class IDevice;
+
+    using Buffer = std::shared_ptr<IBuffer>;
+    using InputLayout = std::shared_ptr<IInputLayout>;
+    using GraphicsPipeline = std::shared_ptr<IGraphicsPipeline>;
+    using Shader = std::shared_ptr<IShader>;
+    using Sampler = std::shared_ptr<ISampler>;
+    using Texture = std::shared_ptr<ITexture>;
+    using Framebuffer = std::shared_ptr<IFramebuffer>;
+    using CommandList = std::shared_ptr<ICommandList>;
+    using Device = std::shared_ptr<IDevice>;
     // ===================
     // Enums
     // ===================
@@ -146,10 +158,10 @@ namespace alina {
         DrawArguments& setInstanceCount(uint32_t value) { instanceCount = value; return *this; }
     };
     struct BindVertexBuffer {
-        IBuffer* buffer = 0;
+        Buffer buffer = 0;
         uint32_t offset = 0, stride = 0;
 
-        BindVertexBuffer& setBuffer(IBuffer*  value) {buffer = value; return *this;}
+        BindVertexBuffer& setBuffer(Buffer  value) {buffer = value; return *this;}
         BindVertexBuffer& setOffset(uint32_t value) {offset = value; return *this;}
         BindVertexBuffer& setStride(uint32_t value) {stride = value; return *this;}
     };
@@ -157,24 +169,24 @@ namespace alina {
         float r=.0f,g=.0f,b=.0f,a = 1.0;
     };
     struct FramebufferAttachment {
-        ITexture* texture;
-        FramebufferAttachment& setTexture(ITexture* value) {texture = value; return *this;}
+        Texture texture;
+        FramebufferAttachment& setTexture(Texture value) {texture = value; return *this;}
     };
     struct UniformBufferBinding {
-        IBuffer* buffer = nullptr;
+        Buffer buffer = nullptr;
         uint32_t set = 0, binding = 0;
         
-        UniformBufferBinding& setBuffer(IBuffer* value) {buffer = value; return *this;}
+        UniformBufferBinding& setBuffer(Buffer value) {buffer = value; return *this;}
         UniformBufferBinding& setSet(uint32_t value) {set = value; return *this;}
         UniformBufferBinding& setBinding(uint32_t value) {binding = value; return *this;}
     };
     struct TextureBinding {
-        ISampler* sampler = nullptr;
-        ITexture* texture = nullptr;
+        Sampler sampler = nullptr;
+        Texture texture = nullptr;
         uint32_t set = 0, binding = 0;
 
-        TextureBinding& setTexture(ITexture* value) {texture = value; return *this;}
-        TextureBinding& setSampler(ISampler* value) {sampler = value; return *this;}
+        TextureBinding& setTexture(Texture value) {texture = value; return *this;}
+        TextureBinding& setSampler(Sampler value) {sampler = value; return *this;}
         TextureBinding& setSet(uint32_t value) {set = value; return *this;}
         TextureBinding& setBinding(uint32_t value) {binding = value; return *this;}
     };
@@ -205,14 +217,14 @@ namespace alina {
     struct GraphicsPipelineDesc {
         PrimitiveType primType = PrimitiveType::TriangleList;
         RenderState renderState;
-        IInputLayout* inputLayout = nullptr;
-        IShader *vs = nullptr,*fs = nullptr;
+        InputLayout inputLayout = nullptr;
+        Shader vs = nullptr,fs = nullptr;
 
         GraphicsPipelineDesc& setPrimType(PrimitiveType type) { primType = type; return *this; }
         GraphicsPipelineDesc& setRenderState(RenderState state) { renderState = state; return *this; }
-        GraphicsPipelineDesc& setInputLayout(IInputLayout* value) { inputLayout = value; return *this; }
-        GraphicsPipelineDesc& setVertexShader(IShader* value) { vs = value; return *this; }
-        GraphicsPipelineDesc& setFragmentShader(IShader* value) { fs = value; return *this; }
+        GraphicsPipelineDesc& setInputLayout(InputLayout value) { inputLayout = value; return *this; }
+        GraphicsPipelineDesc& setVertexShader(Shader value) { vs = value; return *this; }
+        GraphicsPipelineDesc& setFragmentShader(Shader value) { fs = value; return *this; }
     };
     struct SamplerDesc {
         TextureFilter filter = TextureFilter::Bilinear;
@@ -268,10 +280,10 @@ namespace alina {
         };
     };
     struct RenderPassDesc {
-        IFramebuffer* fb = nullptr;
+        Framebuffer fb = nullptr;
         std::array<RenderPassLoadOp, 8> loadOps;
         std::array<std::array<float, 4>, 8> clearColors;
-        RenderPassDesc& setFramebuffer(IFramebuffer* value) {fb = value; return *this;}
+        RenderPassDesc& setFramebuffer(Framebuffer value) {fb = value; return *this;}
         RenderPassDesc& setAttachmentsLoadOp(const std::array<RenderPassLoadOp, 8>& value) {loadOps = value; return *this;}
         RenderPassDesc& setAttachmentsClearColors(const std::array<std::array<float, 4>, 8>& value) {clearColors = value; return *this;}
     
@@ -341,19 +353,19 @@ namespace alina {
     public:
         virtual ~ICommandList() = default;
         virtual void begin() = 0;
-        virtual void bindGraphicsPipeline(IGraphicsPipeline* pipeline) = 0;
+        virtual void bindGraphicsPipeline(GraphicsPipeline pipeline) = 0;
         virtual void bindShaderResources(const ShaderResources& shaderResouces) = 0;
         virtual void bindVertexBuffers(const std::vector<BindVertexBuffer>& buffers) = 0;
-        virtual void bindIndexBuffer(IBuffer* buffer) = 0;
+        virtual void bindIndexBuffer(Buffer buffer) = 0;
         virtual void draw(const DrawArguments& drawArgs) = 0;
         virtual void drawIndexed(const DrawArguments& drawArgs) = 0;
-        virtual void writeBuffer(IBuffer* buffer, const void* data, size_t size, size_t offset) = 0;
-        virtual void clearBuffer(IBuffer* buffer, uint32_t clearValue) = 0;
+        virtual void writeBuffer(Buffer buffer, const void* data, size_t size, size_t offset) = 0;
+        virtual void clearBuffer(Buffer buffer, uint32_t clearValue) = 0;
         //TODO: add offsets and portions of the texture
-        virtual void blitTexture(ITexture* src, ITexture* dest) = 0;
-        virtual void generateMipMaps(ITexture* tex) = 0;
+        virtual void blitTexture(Texture src, Texture dest) = 0;
+        virtual void generateMipMaps(Texture tex) = 0;
         //TODO: add offsets and portions of the texture
-        virtual void writeTexture(ITexture* tex, const void* data, TextureFormat dataFormat) = 0;
+        virtual void writeTexture(Texture tex, const void* data, TextureFormat dataFormat) = 0;
         virtual void beginRenderPass(const RenderPassDesc& desc) = 0;
         virtual void beginSubPass(const SubPassDesc& desc) = 0;
         virtual void endRenderPass() = 0;
@@ -364,16 +376,16 @@ namespace alina {
         virtual ~IDevice() = default;
         virtual bool beginFrame() = 0;
         virtual void endFrame() = 0;
-        virtual IBuffer* createBuffer(const BufferDesc& desc) = 0;
-        virtual ICommandList* createCommandList() = 0;
-        virtual IInputLayout* createInputLayout(const VertexAttributeDesc* attrs, size_t size) = 0;
-        inline IInputLayout* createInputLayout(const std::vector<VertexAttributeDesc>& attrs) {return createInputLayout(attrs.data(), attrs.size());}
+        virtual Buffer createBuffer(const BufferDesc& desc) = 0;
+        virtual CommandList createCommandList() = 0;
+        virtual InputLayout createInputLayout(const VertexAttributeDesc* attrs, size_t size) = 0;
+        inline InputLayout createInputLayout(const std::vector<VertexAttributeDesc>& attrs) {return createInputLayout(attrs.data(), attrs.size());}
         //Raw Shader data, for opengl -> glsl text, for vulkan -> spirv
-        virtual IShader* createShader(ShaderType type, const void* data, size_t size) = 0;
-        virtual IGraphicsPipeline* createGraphicsPipeline(const GraphicsPipelineDesc& desc) = 0;
-        virtual ITexture* createTexture(const TextureDesc& desc) = 0;
-        virtual ISampler* createSampler(const SamplerDesc& desc) = 0;
-        virtual IFramebuffer* createFramebuffer(const FramebufferDesc& desc) = 0;
-        virtual void execute(ICommandList* cmd) = 0;
+        virtual Shader createShader(ShaderType type, const void* data, size_t size) = 0;
+        virtual GraphicsPipeline createGraphicsPipeline(const GraphicsPipelineDesc& desc) = 0;
+        virtual Texture createTexture(const TextureDesc& desc) = 0;
+        virtual Sampler createSampler(const SamplerDesc& desc) = 0;
+        virtual Framebuffer createFramebuffer(const FramebufferDesc& desc) = 0;
+        virtual void execute(CommandList cmd) = 0;
     };
 }

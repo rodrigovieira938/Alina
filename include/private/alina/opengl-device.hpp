@@ -5,24 +5,24 @@
 #include <glad/gl.h>
 
 namespace alina::opengl {
-    class Device : public IGlDevice {
+    class GlDevice : public IGlDevice, std::enable_shared_from_this<GlDevice> {
     public:
-        Device(glLoadFunction fn);
+        GlDevice(glLoadFunction fn);
         GladGLContext getContext() override {return context;}
-        ITexture* createUnmanagedTexture(uint32_t id) override;
-        IFramebuffer* createUnmanagedFramebuffer(uint32_t id) override;
+        Texture createUnmanagedTexture(uint32_t id) override;
+        Framebuffer createUnmanagedFramebuffer(uint32_t id) override;
 
         bool beginFrame() override;
         void endFrame() override;
-        IBuffer* createBuffer(const BufferDesc& desc) override;
-        ICommandList* createCommandList() override;
-        IInputLayout* createInputLayout(const VertexAttributeDesc* attrs, size_t size) override;
-        inline IInputLayout* createInputLayout(const std::vector<VertexAttributeDesc>& attrs) {return createInputLayout(attrs.data(), attrs.size());}
-        IShader* createShader(ShaderType type, const void* data, size_t size) override;
-        IGraphicsPipeline* createGraphicsPipeline(const GraphicsPipelineDesc& desc) override;
-        ITexture* createTexture(const TextureDesc& desc) override;
-        ISampler* createSampler(const SamplerDesc& desc) override;
-        IFramebuffer* createFramebuffer(const FramebufferDesc& desc) override;
+        Buffer createBuffer(const BufferDesc& desc) override;
+        CommandList createCommandList() override;
+        InputLayout createInputLayout(const VertexAttributeDesc* attrs, size_t size) override;
+        inline InputLayout createInputLayout(const std::vector<VertexAttributeDesc>& attrs) {return createInputLayout(attrs.data(), attrs.size());}
+        Shader createShader(ShaderType type, const void* data, size_t size) override;
+        GraphicsPipeline createGraphicsPipeline(const GraphicsPipelineDesc& desc) override;
+        Texture createTexture(const TextureDesc& desc) override;
+        Sampler createSampler(const SamplerDesc& desc) override;
+        Framebuffer createFramebuffer(const FramebufferDesc& desc) override;
         void execute(const Commands::BindGraphicsPipeline& command);
         void execute(const Commands::BindShaderResources& command);
         void execute(const Commands::BindVertexBuffers& command);
@@ -37,11 +37,11 @@ namespace alina::opengl {
         void execute(const Commands::BeginRenderPass& command);
         void execute(const Commands::BeginSubPass& command);
         void execute(const Commands::EndRenderPass& command);
-        void execute(ICommandList* cmd) override;
+        void execute(CommandList cmd) override;
 
 
         RenderPassDesc currentRenderPass;
-        GraphicsPipeline* currentPipeline;
+        GlGraphicsPipeline* currentPipeline;
         GladGLContext context;
     };
 }

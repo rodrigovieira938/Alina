@@ -1,12 +1,12 @@
 #include <alina/opengl-inputlayout.hpp>
 namespace alina::opengl {
-    InputLayout::InputLayout(const VertexAttributeDesc* attrs, size_t size) : attrs(attrs, attrs+size) {
+    GlInputLayout::GlInputLayout(const VertexAttributeDesc* attrs, size_t size) : attrs(attrs, attrs+size) {
 
     }
-    VertexAttributeDesc* InputLayout::getAttributes() {
+    VertexAttributeDesc* GlInputLayout::getAttributes() {
         return attrs.data();
     }
-    size_t InputLayout::getNumAttributes() {
+    size_t GlInputLayout::getNumAttributes() {
         return attrs.size();
     }
 }

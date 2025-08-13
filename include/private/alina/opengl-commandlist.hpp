@@ -12,35 +12,35 @@ namespace alina::opengl {
             DrawArguments args;
         };
         struct WriteBuffer {
-            IBuffer* buffer; 
+            Buffer buffer; 
             const void* data;
             size_t size;
             size_t offset;
         };
         struct ClearBuffer {
-            IBuffer* buffer;
+            Buffer buffer;
             uint32_t clearValue;
         };
         struct BindGraphicsPipeline {
-            alina::IGraphicsPipeline* pipeline;
+            alina::GraphicsPipeline pipeline;
         };
         struct BindVertexBuffers {
             std::vector<BindVertexBuffer> buffers;
         };
         struct BindIndexBuffer {
-            IBuffer* buffer;
+            Buffer buffer;
         };
         struct BindShaderResources {
             ShaderResources shaderResources;
         };
         struct BlitTextures {
-            ITexture *src, *dest;
+            Texture src, dest;
         };
         struct GenerateMipMaps {
-            ITexture* tex;
+            Texture tex;
         };
         struct WriteTexture {
-            ITexture* tex;
+            Texture tex;
             const void* data;
             TextureFormat dataFormat;
         };
@@ -52,7 +52,7 @@ namespace alina::opengl {
         };
         struct EndRenderPass {};
     };
-    class CommandList : public ICommandList {
+    class GlCommandList : public ICommandList {
     public:
         using Command = std::variant<
             Commands::Draw,
@@ -71,17 +71,17 @@ namespace alina::opengl {
             Commands::EndRenderPass
         >;
         void begin() override;
-        void bindGraphicsPipeline(alina::IGraphicsPipeline* pipeline) override;
+        void bindGraphicsPipeline(alina::GraphicsPipeline pipeline) override;
         void bindShaderResources(const ShaderResources& shaderResouces) override;
         void bindVertexBuffers(const std::vector<BindVertexBuffer>& buffers) override;
-        void bindIndexBuffer(IBuffer* buffer) override;
+        void bindIndexBuffer(Buffer buffer) override;
         void draw(const DrawArguments& drawArgs) override;
         void drawIndexed(const DrawArguments& drawArgs) override;
-        void writeBuffer(IBuffer* buffer, const void* data, size_t size, size_t offset) override;
-        void clearBuffer(IBuffer* buffer, uint32_t clearValue) override;
-        void blitTexture(ITexture* src, ITexture* dest) override;
-        void generateMipMaps(ITexture* tex) override;
-        void writeTexture(ITexture* tex, const void* data, TextureFormat dataFormat) override;
+        void writeBuffer(Buffer buffer, const void* data, size_t size, size_t offset) override;
+        void clearBuffer(Buffer buffer, uint32_t clearValue) override;
+        void blitTexture(Texture src, Texture dest) override;
+        void generateMipMaps(Texture tex) override;
+        void writeTexture(Texture tex, const void* data, TextureFormat dataFormat) override;
         void beginRenderPass(const RenderPassDesc& desc) override;
         void beginSubPass(const SubPassDesc& desc) override;
         void endRenderPass() override;

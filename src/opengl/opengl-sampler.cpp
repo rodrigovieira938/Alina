@@ -3,8 +3,8 @@
 #include <alina/opengl-conversions.hpp>
 
 namespace alina::opengl {
-    Sampler::Sampler(const SamplerDesc& desc, IDevice* device) {
-        auto context = ((Device*)device)->context;
+    GlSampler::GlSampler(const SamplerDesc& desc, GlDevice* device) {
+        auto context = device->context;
         context.CreateSamplers(1, &id);
         if(desc.magFilter) {
             //Mipmaps filtering on mag is not permitted

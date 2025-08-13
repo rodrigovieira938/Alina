@@ -6,8 +6,8 @@
 #include <math.h>
 
 namespace alina::opengl {
-    Texture::Texture(const TextureDesc& _desc, IDevice* device) : desc(_desc) {
-        auto context = ((Device*)device)->context;
+    GlTexture::GlTexture(const TextureDesc& _desc, GlDevice* device) : desc(_desc) {
+        auto context = device->context;
         if(desc.mipLevels == 0)
             desc.sampler.mipFilter = false;
         context.CreateTextures(desc.depth == 1 ? GL_TEXTURE_2D : GL_TEXTURE_3D, 1, &id);
@@ -32,8 +32,8 @@ namespace alina::opengl {
             context.TextureParameterfv(id, GL_TEXTURE_BORDER_COLOR, &desc.sampler.border.r);
         context.ObjectLabel(GL_TEXTURE, id, desc.name.size(), desc.name.data());
     }
-    Texture::Texture(uint32_t id, IDevice* device) {
-        auto context = ((Device*)device)->context;
+    GlTexture::GlTexture(uint32_t id, GlDevice* device) {
+        auto context = device->context;
         GLint internalFormat = 0, width = 0, height = 0, depth = 0, mipLevels = 0;
         context.GetTextureLevelParameteriv(id, 0, GL_TEXTURE_INTERNAL_FORMAT, &internalFormat);
         context.GetTextureLevelParameteriv(id, 0, GL_TEXTURE_WIDTH, &width);
@@ -48,5 +48,5 @@ namespace alina::opengl {
         desc.mipLevels = mipLevels + 1;
         this->id = id;
     }
-    TextureFormat Texture::getFormat() {return desc.format;}
+    TextureFormat GlTexture::getFormat() {return desc.format;}
 }

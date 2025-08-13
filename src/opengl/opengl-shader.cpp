@@ -2,9 +2,10 @@
 #include <alina/opengl-device.hpp>
 #include <alina/opengl-conversions.hpp>
 #include <iostream>
+#include <memory>
 
 namespace alina::opengl {
-    Shader* Shader::createShader(Device* device, ShaderType type, const void* data, size_t size) {
+    std::shared_ptr<IShader> GlShader::createShader(GlDevice* device, ShaderType type, const void* data, size_t size) {
         GladGLContext context = device->context;
         uint32_t id = context.CreateShader(shaderTypeToGl(type));
         const char* str = static_cast<const char*>(data);
@@ -22,13 +23,13 @@ namespace alina::opengl {
             //TODO: write to a log
             return nullptr;
         }
-        return new Shader(id, type);
+        return std::shared_ptr<GlShader>(new GlShader(id, type));
     }
-    Shader::Shader(uint32_t id, ShaderType type) {
+    GlShader::GlShader(uint32_t id, ShaderType type) {
         this->id = id;
         this->type = type;
     }
-    ShaderType Shader::getType() {
+    ShaderType GlShader::getType() {
         return type;
     }
 }

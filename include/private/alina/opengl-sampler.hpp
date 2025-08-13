@@ -1,10 +1,11 @@
 #pragma once
 
+#include "alina/opengl-device.hpp"
 #include <alina/alina.hpp>
 namespace alina::opengl {
-    class Sampler : public ISampler {
+    class GlSampler : public ISampler {
     public:
-        Sampler(const SamplerDesc& desc, IDevice* device);
+        GlSampler(const SamplerDesc& desc, GlDevice* device);
 
         uint32_t id;
     };

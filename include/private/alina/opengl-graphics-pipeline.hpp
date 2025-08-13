@@ -2,14 +2,14 @@
 #include <alina/alina.hpp>
 
 namespace alina::opengl {
-    class Device;
-    class GraphicsPipeline : public IGraphicsPipeline {
+    class GlDevice;
+    class GlGraphicsPipeline : public IGraphicsPipeline {
     public:
-        GraphicsPipeline(GraphicsPipelineDesc desc, Device* device);
+        GlGraphicsPipeline(GraphicsPipelineDesc desc, GlDevice* device);
         void bind();
 
         uint32_t vertexArray, program = 0;
         GraphicsPipelineDesc desc;
-        Device* device;
+        GlDevice* device;
     };
 }

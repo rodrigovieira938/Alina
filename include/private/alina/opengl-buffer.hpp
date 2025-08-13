@@ -5,12 +5,12 @@
 #include <stdint.h>
 
 namespace alina::opengl {
-    class Buffer : public IBuffer {
+    class GlBuffer : public IBuffer {
     public:
-        Buffer(const BufferDesc& desc, Device* device);
+        GlBuffer(const BufferDesc& desc, GlDevice* device);
         BufferType getType() const override {return mType;}
 
-        Device* mDevice;
+        GlDevice* mDevice;
         BufferType mType;
         uint32_t mID;
         size_t size = 0;

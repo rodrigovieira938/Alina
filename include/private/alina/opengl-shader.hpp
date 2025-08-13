@@ -2,15 +2,15 @@
 #include <alina/alina.hpp>
 
 namespace alina::opengl {
-    class Device;
-    class Shader : public IShader {
+    class GlDevice;
+    class GlShader : public IShader {
     public:
-        static Shader* createShader(Device* device, ShaderType type, const void* data, size_t size);
+        static std::shared_ptr<IShader> createShader(GlDevice* device, ShaderType type, const void* data, size_t size);
         ShaderType getType() override;
 
         ShaderType type;
         uint32_t id;
     private:
-        Shader(uint32_t id, ShaderType type);
+        GlShader(uint32_t id, ShaderType type);
     };
 }
