@@ -7,10 +7,14 @@ namespace alina::opengl {
     public:
         static std::shared_ptr<IShader> createShader(GlDevice* device, ShaderType type, const void* data, size_t size);
         ShaderType getType() override;
-
+        IDevice* getDevice() override;
+        std::string getName() override;
+        void setName(const std::string& name) override;
+        
         ShaderType type;
         uint32_t id;
+        GlDevice* device;
     private:
-        GlShader(uint32_t id, ShaderType type);
+        GlShader(GlDevice* device, uint32_t id, ShaderType type);
     };
 }

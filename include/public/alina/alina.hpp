@@ -314,42 +314,53 @@ namespace alina {
     // ===================
     // Interfaces
     // ===================
+    class IObject {
+    public:
+        virtual ~IObject() = default;
+        virtual IDevice* getDevice() = 0;
+    };
+    class INameableObject : public IObject {
+    public:
+        virtual ~INameableObject() = default;
+        virtual std::string getName() = 0;
+        virtual void setName(const std::string& name) = 0;
+    };
 
-    class IBuffer {
+    class IBuffer : public INameableObject{
     public:
         virtual ~IBuffer() = default;
         virtual BufferType getType() const = 0; 
     };
 
-    class IInputLayout {
+    class IInputLayout : public INameableObject{
     public:
         virtual ~IInputLayout() = default;
         virtual VertexAttributeDesc* getAttributes() = 0;
         virtual size_t getNumAttributes() = 0;
     };
-    class IShader {
+    class IShader : public INameableObject{
     public:
         virtual ~IShader() = default;
         virtual ShaderType getType() = 0;
     };
-    class IGraphicsPipeline {
+    class IGraphicsPipeline : public INameableObject{
     public:
         virtual ~IGraphicsPipeline() = default;
     };
-    class ISampler {
+    class ISampler : public INameableObject{
     public:
         virtual ~ISampler() = default;
     };
-    class ITexture {
+    class ITexture : public INameableObject{
     public:
         virtual ~ITexture() = default;
         virtual TextureFormat getFormat() = 0;
     };
-    class IFramebuffer {
+    class IFramebuffer : public INameableObject{
     public:
         virtual ~IFramebuffer() = default;
     };
-    class ICommandList {
+    class ICommandList : public INameableObject{
     public:
         virtual ~ICommandList() = default;
         virtual void begin() = 0;
@@ -371,7 +382,7 @@ namespace alina {
         virtual void endRenderPass() = 0;
         virtual void end() = 0;
     };
-    class IDevice {
+    class IDevice{
     public:
         virtual ~IDevice() = default;
         virtual bool beginFrame() = 0;

@@ -35,13 +35,13 @@ namespace alina::opengl {
         return std::make_shared<GlBuffer>(desc, this);
     }
     CommandList GlDevice::createCommandList() {
-        return std::make_shared<GlCommandList>();
+        return std::make_shared<GlCommandList>(this);
     }
     Shader GlDevice::createShader(ShaderType type, const void* data, size_t size) {
         return GlShader::createShader(this, type, data, size);
     }
     InputLayout GlDevice::createInputLayout(const VertexAttributeDesc* attrs, size_t size) {
-        return std::make_shared<GlInputLayout>(attrs, size);
+        return std::make_shared<GlInputLayout>(this, attrs, size);
     }
     GraphicsPipeline GlDevice::createGraphicsPipeline(const GraphicsPipelineDesc& desc) {
         return std::make_shared<GlGraphicsPipeline>(desc, this);

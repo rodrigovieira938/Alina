@@ -7,6 +7,7 @@
 
 namespace alina::opengl {
     GlTexture::GlTexture(const TextureDesc& _desc, GlDevice* device) : desc(_desc) {
+        this->device = device;
         auto context = device->context;
         if(desc.mipLevels == 0)
             desc.sampler.mipFilter = false;
@@ -33,6 +34,7 @@ namespace alina::opengl {
         context.ObjectLabel(GL_TEXTURE, id, desc.name.size(), desc.name.data());
     }
     GlTexture::GlTexture(uint32_t id, GlDevice* device) {
+        this->device = device;
         auto context = device->context;
         GLint internalFormat = 0, width = 0, height = 0, depth = 0, mipLevels = 0;
         context.GetTextureLevelParameteriv(id, 0, GL_TEXTURE_INTERNAL_FORMAT, &internalFormat);
@@ -49,4 +51,15 @@ namespace alina::opengl {
         this->id = id;
     }
     TextureFormat GlTexture::getFormat() {return desc.format;}
+    std::string GlTexture::getName() {
+        GLsizei length;
+        device->context.GetObjectLabel(GL_BUFFER, id, 0, &length, nullptr);
+        std::string str;
+        str.resize(length, '\0');
+        device->context.GetObjectLabel(GL_BUFFER, id, length+1, &length, str.data());
+        return str;
+    }
+    void GlTexture::setName(const std::string& name) {
+        device->context.ObjectLabel(GL_BUFFER, id, name.size(), name.data());
+    }
 }

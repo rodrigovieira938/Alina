@@ -1,6 +1,11 @@
 #include <alina/opengl-commandlist.hpp>
+#include <alina/opengl-device.hpp>
 
 namespace alina::opengl {
+    GlCommandList::GlCommandList(GlDevice* device) {
+        this->device = device;
+    };
+    IDevice* GlCommandList::getDevice() {return device;}
     void GlCommandList::begin() {
         doneRecording = false;
         commands.clear();

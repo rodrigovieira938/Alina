@@ -4,6 +4,7 @@
 
 namespace alina::opengl {
     GlSampler::GlSampler(const SamplerDesc& desc, GlDevice* device) {
+        this->device = device;
         auto context = device->context;
         context.CreateSamplers(1, &id);
         if(desc.magFilter) {
@@ -19,5 +20,16 @@ namespace alina::opengl {
     
         if(desc.u == TextureWrap::ClampToBorder || desc.v == TextureWrap::ClampToBorder || desc.w == TextureWrap::ClampToBorder)
             context.SamplerParameterfv(id, GL_TEXTURE_BORDER_COLOR, &desc.border.r);
+    }
+    std::string GlSampler::getName() {
+        GLsizei length;
+        device->context.GetObjectLabel(GL_BUFFER, id, 0, &length, nullptr);
+        std::string str;
+        str.resize(length, '\0');
+        device->context.GetObjectLabel(GL_BUFFER, id, length+1, &length, str.data());
+        return str;
+    }
+    void GlSampler::setName(const std::string& name) {
+        device->context.ObjectLabel(GL_BUFFER, id, name.size(), name.data());
     }
 }

@@ -6,9 +6,14 @@ namespace alina::opengl {
     public:
         GlTexture(const TextureDesc& desc, GlDevice* device);
         GlTexture(uint32_t id, GlDevice* device);
+        
         TextureFormat getFormat() override;
+        IDevice* getDevice() override {return device;}
+        std::string getName() override;
+        void setName(const std::string& name) override;
 
         uint32_t id;
         TextureDesc desc;
+        GlDevice* device;
     };
 }

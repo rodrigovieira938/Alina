@@ -45,4 +45,5 @@ namespace alina::opengl {
         device->context.BindVertexArray(vertexArray);
         device->context.UseProgram(program);
     }
+    IDevice* GlGraphicsPipeline::getDevice() {return device;}
 }

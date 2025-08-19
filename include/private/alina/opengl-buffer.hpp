@@ -9,6 +9,9 @@ namespace alina::opengl {
     public:
         GlBuffer(const BufferDesc& desc, GlDevice* device);
         BufferType getType() const override {return mType;}
+        IDevice* getDevice() override {return mDevice;}
+        std::string getName() override;
+        void setName(const std::string& name) override;
 
         GlDevice* mDevice;
         BufferType mType;
