@@ -103,11 +103,12 @@ namespace alina::opengl {
         GlBuffer* buffer = (GlBuffer*)command.buffer.get();
         GLenum bufferType = bufferTypeToGl(buffer->mType); 
         context.BindBuffer(bufferType, buffer->mID);
-        if(command.size > buffer->size)
+        if(command.size > buffer->size) {
             context.BufferData(bufferType, command.size, command.data, GL_DYNAMIC_DRAW);
+            buffer->size = command.size;
+        }
         else
             context.BufferSubData(bufferType, command.offset, command.size, command.data);
-        buffer->size = command.size;
         context.BindBuffer(bufferType, 0);
     }
     void GlDevice::execute(const Commands::ClearBuffer& command) {
