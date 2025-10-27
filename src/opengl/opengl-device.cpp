@@ -144,9 +144,17 @@ namespace alina::opengl {
     }
     void GlDevice::execute(const Commands::BeginRenderPass& command) {
         //TODO: validate renderpass
+        //TODO: replace this makeshift support of default framebuffer
         auto fb = (GlFramebuffer*)command.desc.fb.get();
         context.BindFramebuffer(GL_FRAMEBUFFER, fb->id);
-        for(int i = 0; fb->desc.colorAttachments[i].texture != nullptr; i++) {
+        int count = 1;
+        if(fb->id == 0) {
+            count = 1;
+        } else {
+            for(count = 0; fb->desc.colorAttachments[count].texture != nullptr; count++);
+        }
+
+        for(int i = 0; i < count; i++) {
             if(command.desc.loadOps[i] == RenderPassLoadOp::CLEAR) {
                 context.ClearBufferfv(GL_COLOR, i, command.desc.clearColors[i].data());
             }
@@ -155,17 +163,24 @@ namespace alina::opengl {
     }
     void GlDevice::execute(const Commands::BeginSubPass& command) {
         //TODO: validate subpass
+        //TODO: replace this makeshift support of default framebuffer
         std::array<GLenum, 8> drawBuffers;
         int count = 0;
         int it = 0;
-
-        for(int i = 0; ((GlFramebuffer*)currentRenderPass.fb.get())->desc.colorAttachments[i].texture.get() != nullptr;i++) {
-            if(command.desc.attachments[i] == SubPassAttachment::COLOR) {
-                drawBuffers[it] = GL_COLOR_ATTACHMENT0 + i;
-                it++;
+        GlFramebuffer* fb = (GlFramebuffer*)currentRenderPass.fb.get();
+        if(fb->id != 0) {
+            for(int i = 0; fb->desc.colorAttachments[i].texture.get() != nullptr;i++) {
+                if(command.desc.attachments[i] == SubPassAttachment::COLOR) {
+                    drawBuffers[it] = GL_COLOR_ATTACHMENT0 + i;
+                    it++;
+                    count++;
+                }
+            }
+        } else {
+            if(command.desc.attachments[0] == SubPassAttachment::COLOR) {
+                drawBuffers[0] = GL_COLOR_ATTACHMENT0;
                 count++;
             }
-
         }
 
         context.DrawBuffers(count, drawBuffers.data());
