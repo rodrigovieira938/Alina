@@ -5,7 +5,7 @@
 namespace alina::opengl {
     class GlInputLayout : public IInputLayout {
     public:
-        GlInputLayout(GlDevice* device, const VertexAttributeDesc* attrs, size_t size);
+        GlInputLayout(GlDevice* device, const VertexAttributeDesc* _attrs, size_t size);
         VertexAttributeDesc* getAttributes() override;
         size_t getNumAttributes() override;
         IDevice* getDevice() override {return device;}
