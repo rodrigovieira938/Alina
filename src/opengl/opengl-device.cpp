@@ -37,8 +37,8 @@ namespace alina::opengl {
     CommandList GlDevice::createCommandList() {
         return std::make_shared<GlCommandList>(this);
     }
-    Shader GlDevice::createShader(ShaderType type, const void* data, size_t size) {
-        return GlShader::createShader(this, type, data, size);
+    Shader GlDevice::createShader(ShaderType type, const void* data, size_t size, const std::string& entry_point) {
+        return GlShader::createShader(this, type, data, size, entry_point);
     }
     InputLayout GlDevice::createInputLayout(const VertexAttributeDesc* attrs, size_t size) {
         return std::make_shared<GlInputLayout>(this, attrs, size);

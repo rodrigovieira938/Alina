@@ -5,7 +5,7 @@ namespace alina::opengl {
     class GlDevice;
     class GlShader : public IShader {
     public:
-        static std::shared_ptr<IShader> createShader(GlDevice* device, ShaderType type, const void* data, size_t size);
+        static std::shared_ptr<IShader> createShader(GlDevice* device, ShaderType type, const void* data, size_t size, const std::string& entry_point);
         ShaderType getType() override;
         IDevice* getDevice() override;
         std::string getName() override;

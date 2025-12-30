@@ -18,7 +18,7 @@ namespace alina::opengl {
         CommandList createCommandList() override;
         InputLayout createInputLayout(const VertexAttributeDesc* attrs, size_t size) override;
         inline InputLayout createInputLayout(const std::vector<VertexAttributeDesc>& attrs) {return createInputLayout(attrs.data(), attrs.size());}
-        Shader createShader(ShaderType type, const void* data, size_t size) override;
+        Shader createShader(ShaderType type, const void* data, size_t size, const std::string& entry_point = "main") override;
         GraphicsPipeline createGraphicsPipeline(const GraphicsPipelineDesc& desc) override;
         Texture createTexture(const TextureDesc& desc) override;
         Sampler createSampler(const SamplerDesc& desc) override;
