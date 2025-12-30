@@ -3,6 +3,7 @@
 #include <alina/opengl-conversions.hpp>
 #include <alina/opengl-device.hpp>
 #include <alina/opengl-shader.hpp>
+#include <iostream>
 #include <memory>
 namespace alina::opengl {
     static InputLayout defaultInputLayout = nullptr;
@@ -36,6 +37,18 @@ namespace alina::opengl {
             if(desc.fs)
                 device->context.AttachShader(program, ((GlShader*)desc.fs.get())->id);
             device->context.LinkProgram(program);
+            GLint linked;
+            context.GetProgramiv(program, GL_LINK_STATUS, &linked);
+            if (!linked) {
+                GLint logLength;
+                context.GetProgramiv(program, GL_INFO_LOG_LENGTH, &logLength);
+                std::string log;
+                log.resize(logLength);
+                context.GetProgramInfoLog(program, logLength, NULL, log.data());
+                std::cout << "ERROR LINKING PROGRAM " << log << "\n";
+                context.DeleteProgram(program);
+                program = 0;
+            }
         }
     }
     void GlGraphicsPipeline::bind() {
