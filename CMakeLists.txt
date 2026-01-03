@@ -3,6 +3,7 @@ project(alina)
 include(FetchContent)
 
 option(ALINA_BUILD_EXAMPLES "Build Examples" ON)
+option(ALINA_BUILD_TESTS "Build Tests" ON)
 
 FetchContent_Declare(
     glad
@@ -31,6 +32,13 @@ FetchContent_Declare(
   GIT_SHALLOW TRUE
   GIT_PROGRESS TRUE
 )
+FetchContent_Declare(
+  catch2
+  GIT_REPOSITORY https://github.com/catchorg/Catch2
+  GIT_TAG v3.12.0
+  GIT_SHALLOW TRUE
+  GIT_PROGRESS TRUE
+)
 
 FetchContent_MakeAvailable(glad)
 
@@ -47,4 +55,8 @@ if(${ALINA_BUILD_EXAMPLES})
   add_subdirectory(examples)
   add_library(stb INTERFACE)
   target_include_directories(stb INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/_deps/stb-src)
+endif()
+if(${ALINA_BUILD_TESTS})
+  FetchContent_MakeAvailable(catch2)
+  add_subdirectory(tests) # Users might want libraries from tests/common
 endif()
